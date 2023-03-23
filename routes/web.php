@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\User\MainController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/{any}', [App\Http\Controllers\SPAController::class, 'index'])->where('any', '.*');
+
+// Route::get('/test', "App\Http\Controllers\ReadyRouteController@index");
+// Route::get('/{any}', "App\Http\Controllers\User\MainController@index");
