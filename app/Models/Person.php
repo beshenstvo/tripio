@@ -17,4 +17,6 @@ class Person extends Model
         'email',
         'phone'
     ];
+
+    protected $table = 'person';
 }

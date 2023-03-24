@@ -1,9 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
+use App\Http\Requests\HotelRequest;
+use App\Http\Resources\HotelResource;
 use App\Models\Hotel;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class HotelController extends Controller
 {
@@ -14,17 +18,7 @@ class HotelController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return HotelResource::collection(Hotel::all());
     }
 
     /**
@@ -33,53 +27,48 @@ class HotelController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(HotelRequest $request)
     {
-        //
+        $newCity = Hotel::create($request->validated());
+
+        return new HotelResource($newCity);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Hotel  $hotel
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Hotel $hotel)
+    public function show($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Hotel  $hotel
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Hotel $hotel)
-    {
-        //
+        return new HotelResource(Hotel::findOrFail($id));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Hotel  $hotel
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Hotel $hotel)
+    public function update(HotelRequest $request, Hotel $hotel)
     {
-        //
+        $hotel->update($request->validated());
+
+        return new HotelResource($hotel);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Hotel  $hotel
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy(Hotel $hotel)
     {
-        //
+        $hotel->delete();
+
+        return response(null, Response::HTTP_NO_CONTENT);
     }
 }

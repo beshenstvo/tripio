@@ -2,7 +2,12 @@
 
 use App\Http\Controllers\Api\CardCityController;
 use App\Http\Controllers\Api\CityController;
+use App\Http\Controllers\Api\CommentController;
+use App\Http\Controllers\Api\HotelController;
+use App\Http\Controllers\Api\PersonController;
 use App\Http\Controllers\Api\ReadyRouteController;
+use App\Http\Controllers\Api\RequestController;
+use App\Http\Controllers\Api\ThemeController;
 use App\Http\Controllers\ImageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -25,7 +30,12 @@ use Illuminate\Support\Facades\Route;
 Route::get('image/{path}', [ImageController::class, 'getImage'])->where('path', '.*');
 
 Route::apiResources([
-    'citycard' => CardCityController::class,
+    'themes' =>ThemeController::class,
+    'citycards' => CardCityController::class,
 	'routes' => ReadyRouteController::class,
-    'city' => CityController::class
+    'cities' => CityController::class,
+    'comments' => CommentController::class,
+    'hotels' => HotelController::class,
+    'persons' => PersonController::class,
+    'requests' => RequestController::class,
 ]);

@@ -15,4 +15,6 @@ class Request extends Model
         'client_name',
         'message'
     ];
+
+    protected $table = 'requests';
 }
