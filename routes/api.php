@@ -7,6 +7,9 @@ use App\Http\Controllers\Api\HotelController;
 use App\Http\Controllers\Api\PersonController;
 use App\Http\Controllers\Api\ReadyRouteController;
 use App\Http\Controllers\Api\RequestController;
+use App\Http\Controllers\Api\ReservingController;
+use App\Http\Controllers\Api\ReviewController;
+use App\Http\Controllers\Api\ServiceController;
 use App\Http\Controllers\Api\ThemeController;
 use App\Http\Controllers\ImageController;
 use Illuminate\Http\Request;
@@ -38,4 +41,7 @@ Route::apiResources([
     'hotels' => HotelController::class,
     'persons' => PersonController::class,
     'requests' => RequestController::class,
+    'services' => ServiceController::class,
+    'reservings' => ReservingController::class,
+    'reviews' => ReviewController::class,
 ]);
