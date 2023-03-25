@@ -1,9 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
+use App\Http\Requests\RoomRequest;
+use App\Http\Resources\RoomResource;
 use App\Models\Room;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class RoomController extends Controller
 {
@@ -14,17 +18,7 @@ class RoomController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return RoomResource::collection(Room::all());
     }
 
     /**
@@ -33,53 +27,48 @@ class RoomController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(RoomRequest $request)
     {
-        //
+        $review = Room::create($request->validated());
+
+        return new RoomResource($review);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Room  $room
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Room $room)
+    public function show($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Room  $room
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Room $room)
-    {
-        //
+        return new RoomResource(Room::findOrFail($id));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Room  $room
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Room $room)
+    public function update(RoomRequest $request, Room $room)
     {
-        //
+        $room->update($request->validated());
+
+        return new RoomResource($room);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Room  $room
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy(Room $room)
     {
-        //
+        $room->delete();
+
+        return response(null, Response::HTTP_NO_CONTENT);
     }
 }

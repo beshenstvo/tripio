@@ -3,16 +3,14 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CityCardRequest;
-use App\Http\Resources\CityCardResource;
-use App\Models\Card_city;
+use App\Http\Resources\ShowPlaceResource;
+use App\Models\Showplace;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Validator;
 
-class CardCityController extends Controller
+class ShowPlaceController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -21,7 +19,7 @@ class CardCityController extends Controller
      */
     public function index()
     {
-        return CityCardResource::collection(Card_city::all());
+        return ShowPlaceResource::collection(Showplace::all());
     }
 
     /**
@@ -30,24 +28,26 @@ class CardCityController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CityCardRequest $request)
+    public function store(Request $request)
     {
         try {
             $image = Str::random(32).".".$request->photo->getClientOriginalExtension();
 
             #create 
-            Card_city::create([
-                'city_id' => $request->city_id,
+            $created = Showplace::create([
+                'city_card_id' => $request->city_card_id,
+                'type' => $request->type,
                 'name' => $request->name,
                 'description' => $request->description,
-                'photo' => $image,
+                'photo' => $image
             ]);
 
             #сохранение изображения
             Storage::disk('public')->put($image, file_get_contents($request->photo));
             
             return response()->json([
-                'message' => 'Created'
+                'message' => 'Created',
+                'data' =>  new ShowPlaceResource($created)
             ], 200);
 
 
@@ -66,7 +66,7 @@ class CardCityController extends Controller
      */
     public function show($id)
     {
-        return Card_city::findOrFail($id);
+        return new ShowPlaceResource(Showplace::dinfOrFail($id));
     }
 
     /**
@@ -76,18 +76,19 @@ class CardCityController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(CityCardRequest $request, $id)
+    public function update(Request $request, $id)
     {
         try {
             $image = Str::random(32).".".$request->photo->getClientOriginalExtension();
 
             #update 
-            $card = Card_city::find($id);
-            $card->update([
-                'city_id' => $request->city_id,
+            $showplace = Showplace::find($id);
+            $showplace->update([
+                'city_card_id' => $request->city_card_id,
+                'type' => $request->type,
                 'name' => $request->name,
                 'description' => $request->description,
-                'photo' => $image,
+                'photo' => $image
             ]);
 
             #сохранение изображения
@@ -95,7 +96,7 @@ class CardCityController extends Controller
             
             return response()->json([
                 'message' => 'Updated',
-                'data' => $card
+                'data' => new ShowPlaceResource($showplace)
             ], 200);
 
 
@@ -114,7 +115,7 @@ class CardCityController extends Controller
      */
     public function destroy($id)
     {
-        Card_city::find($id)->delete();
+        Showplace::find($id)->delete();
 
         return response(null, Response::HTTP_NO_CONTENT);
     }
