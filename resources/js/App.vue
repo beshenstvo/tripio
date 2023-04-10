@@ -1,34 +1,78 @@
+
 <template>
-    <div>
-        <h1>app component</h1>
-            
-        <div class="links">
-            <router-link to="/" class="black-text">Куда едем?</router-link>
-            
-            <router-link to="/hotels" class="black-text">Отели</router-link>
-               
-            <router-link to="/exc" class="black-text">Экскурсиии</router-link>    
+  <div id="app" class="bg-light h-screen wrapper" v-show="(currentUserRole != 'admin') && (currentUserRole != 'guide')">
+    <Navigation />
+    <router-view class="main" style=""/>
+    <Footer v-show="(currentPath != '/guide/login') && (currentPath != '/guide/register') && (currentPath != '/admin/login') && (currentPath != '/register') && (currentPath != '/login')"/>
+  </div>
 
-            <router-link to="/forum" class="black-text">Форум</router-link>
-
-            <router-link to="/experience" class="black-text">Обмен опытом</router-link>
-
+  <div class="container-fluid" v-show="currentUserRole == 'admin'">
+    <div class="row">
+      <div class="col-md-2 ps-0">
+        <div class="sidebar">
+          <AdminPanel />
         </div>
-
-        <div class="view">
-            <router-view></router-view>
-        </div>
+      </div>
+      <div class="col-md-10">
+        <router-view class="main" style=""/>
+      </div>
     </div>
+  </div>
+
+  <div class="container-fluid" v-show="currentUserRole == 'guide'">
+    <div class="row">
+      <div class="col-md-2 ps-0">
+        <div class="sidebar">
+          <GuidePanel />
+        </div>
+      </div>
+      <div class="col-md-10">
+        <router-view class="main" style=""/>
+      </div>
+    </div>
+  </div>
+
+
 </template>
 
-<script>
 
+<script>
+import Navigation from "./components/NavigationComponent.vue";
+import Footer from "./components/FooterComponent.vue";
+import AdminPanel from "./components/AdminPanelComponent.vue";
+import GuidePanel from "./components/GuidePanelComponent.vue";
+import axios from 'axios'
+import GuidePanelComponentVue from './components/GuidePanelComponent.vue';
 export default {
-   props: {
-        cities: Array
+  components: {
+    Navigation,
+    Footer,
+    AdminPanel,
+    GuidePanel
+  },
+  data() {
+    return {
+        currentUserRole: localStorage.getItem('role'),
+        currentPath: ''
+    }
+  }, 
+   watch: {
+        $route() {
+          this.currentPath = this.$route.path;
+          this.currentUserRole = localStorage.getItem("role")
+        },
     },
-}
+    mounted() {
+      this.currentPath = this.$route.path;
+    }
+};
 </script>
+
+<style>
+.h-screen {
+  height: 100vh;
+}
+</style>
 
 <style>
 

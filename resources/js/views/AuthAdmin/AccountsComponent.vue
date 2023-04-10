@@ -1,7 +1,5 @@
 <template>
-    <div>
-        <h1>Hotels</h1>
-    </div>
+    <h1>Учетные записи</h1>
 </template>
 
 <script>

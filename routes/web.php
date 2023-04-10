@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\User\MainController;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\File;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,6 +17,3 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/{any}', [App\Http\Controllers\SPAController::class, 'index'])->where('any', '.*');
-
-// Route::get('/test', "App\Http\Controllers\ReadyRouteController@index");
-// Route::get('/{any}', "App\Http\Controllers\User\MainController@index");

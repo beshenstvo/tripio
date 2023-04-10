@@ -10822,3 +10822,17 @@ textarea.form-control-lg {
 h1, .h1 {
   color: red !important;
 }
+
+body {
+  height: 100%;
+}
+
+.wrapper {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.main {
+  flex: 1 1 auto;
+}

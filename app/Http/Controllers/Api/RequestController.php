@@ -9,6 +9,222 @@ use App\Models\Request as ModelsRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
+/**
+ * @OA\Schema(
+ *    schema="RequestsSchema",
+ *    @OA\Property(
+ *        property="id",
+ *        type="integer",
+ *        description="Request ID",
+ *        nullable=false,
+ *        example="1"
+ *    ),
+ *    @OA\Property(
+ *        property="service_id",
+ *        type="integer",
+ *        description="Foreign key service",
+ *        nullable=false,
+ *        example="1"
+ *    ),
+ *    @OA\Property(
+ *        property="client_id",
+ *        type="integer",
+ *        description="Foreign key service",
+ *        nullable=false,
+ *        example="1"
+ *    ),
+ *    @OA\Property(
+ *        property="client_phone",
+ *        type="string",
+ *        description="Номер пользователя, кто оставил заявку на экскурсию",
+ *        nullable=false,
+ *        example="9786666666"
+ *    ),
+ *     @OA\Property(
+ *        property="client_name",
+ *        type="string",
+ *        description="Имя пользователя, кто оставил заявку на экскурсию",
+ *        nullable=false,
+ *        example="Арина"
+ *    ),
+ *     @OA\Property(
+ *        property="message",
+ *        type="text",
+ *        description="Сообщение пользователя",
+ *        nullable=false,
+ *        example="Хотим попасть к вам на экскурсию по Казани"
+ *    ),
+ *    @OA\Property(
+ *        property="created_at",
+ *        type="string",
+ *        description="Date of route creation",
+ *        nullable=false,
+ *        format="date-time"
+ *    ),
+ *    @OA\Property(
+ *        property="updated_at",
+ *        type="string",
+ *        description="Date of last updating route data",
+ *        nullable=false,
+ *        format="date-time"
+ *    ),
+ * )
+ * 
+ * 
+ * 
+ * @OA\Get(
+ *     path="/api/requests",
+ *     tags={"Requests"},
+ *     summary="Вывод списка записей (index())",
+ *     description="Доступ только авторизованным пользователям",
+ *     @OA\Response(
+ *         response=403,
+ *         description="Forbidden"
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Everything OK",
+*         @OA\JsonContent(
+*               ref="#/components/schemas/RequestsSchema"
+*            )
+*     ),
+*       @OA\Response(
+*          response=401,
+*          description="Unauthenticated",
+*      ),     
+* )
+*
+* @OA\Post(
+*      path="/api/requests",
+*      tags={"Requests"},
+*      summary="Добавление новой записи (store())",
+*      description="Возвращает новый созданный route",
+*      @OA\Response(
+*          response=201,
+*          description="Successful operation",
+*          @OA\JsonContent(ref="#/components/schemas/RequestsSchema")
+*       ),
+*      @OA\Response(
+*          response=400,
+*          description="Bad Request"
+*      ),
+*      @OA\Response(
+*          response=401,
+*          description="Unauthenticated",
+*      ),
+*      @OA\Response(
+*          response=403,
+*          description="Forbidden"
+*      )
+* )
+
+* @OA\Get(
+*      path="/api/requests/{id}",
+*      tags={"Requests"},
+*      summary="Вывод конкретной записи (show())",
+*      description="Returns request data",
+*      @OA\Parameter(
+*          name="id",
+*          description="Route id",
+*          required=true,
+*          in="path",
+*          @OA\Schema(
+*              type="integer"
+*          )
+*      ),
+*      @OA\Response(
+*          response=200,
+*          description="Successful operation",
+*          @OA\JsonContent(ref="#/components/schemas/RequestsSchema")
+*       ),
+*      @OA\Response(
+*          response=400,
+*          description="Bad Request"
+*      ),
+*      @OA\Response(
+*          response=401,
+*          description="Unauthenticated",
+*      ),
+*      @OA\Response(
+*          response=403,
+*          description="Forbidden"
+*      )
+* )
+*
+* @OA\Put(
+*      path="/api/requests/{id}",
+*      tags={"Requests"},
+*      summary="Обновление записи (update())",
+*      description="Returns updated request data",
+*      @OA\Parameter(
+*          name="id",
+*          description="Request id",
+*          required=true,
+*          in="path",
+*          @OA\Schema(
+*              type="integer"
+*          )
+*      ),
+*      @OA\RequestBody(
+*          required=true,
+*          @OA\JsonContent(ref="#/components/schemas/RequestsSchema")
+*      ),
+*      @OA\Response(
+*          response=200,
+*          description="Successful operation",
+*          @OA\JsonContent(ref="#/components/schemas/RequestsSchema")
+*       ),
+*      @OA\Response(
+*          response=400,
+*          description="Bad Request"
+*      ),
+*      @OA\Response(
+*          response=401,
+*          description="Unauthenticated",
+*      ),
+*      @OA\Response(
+*          response=403,
+*          description="Forbidden"
+*      ),
+*      @OA\Response(
+*          response=404,
+*          description="Resource Not Found"
+*      )
+* )
+
+* @OA\Delete(
+*      path="/api/requests/{id}",
+*      tags={"Requests"},
+*      summary="Удаление записи (delete())",
+*      description="Deletes a record and returns no content",
+*      @OA\Parameter(
+*          name="id",
+*          description="Request id",
+*          required=true,
+*          in="path",
+*          @OA\Schema(
+*              type="integer"
+*          )
+*      ),
+*      @OA\Response(
+*          response=204,
+*          description="Successful operation",
+*          @OA\JsonContent()
+*       ),
+*      @OA\Response(
+*          response=401,
+*          description="Unauthenticated",
+*      ),
+*      @OA\Response(
+*          response=403,
+*          description="Forbidden"
+*      ),
+*      @OA\Response(
+*          response=404,
+*          description="Resource Not Found"
+*      )
+* )
+*/
 class RequestController extends Controller
 {
     /**

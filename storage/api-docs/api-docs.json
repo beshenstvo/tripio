@@ -1,0 +1,3191 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Tripio",
+        "description": "Документация API",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/citycards": {
+            "get": {
+                "tags": [
+                    "CityCards"
+                ],
+                "summary": "Вывод списка записей (index())",
+                "description": "Доступ только авторизованным пользователям",
+                "responses": {
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "200": {
+                        "description": "Everything OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CardCitySchema"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "CityCards"
+                ],
+                "summary": "Добавление новой записи (store())",
+                "description": "Возвращает новый созданный citycard",
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CardCitySchema"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/api/citycards/{id}": {
+            "get": {
+                "tags": [
+                    "CityCards"
+                ],
+                "summary": "Вывод конкретной записи (show())",
+                "description": "Returns citycard data",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "City id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CardCitySchema"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "CityCards"
+                ],
+                "summary": "Обновление записи (update())",
+                "description": "Returns updated citycard data",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "City id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CardCitySchema"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CardCitySchema"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "CityCards"
+                ],
+                "summary": "Удаление записи (delete())",
+                "description": "Deletes a record and returns no content",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "City id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/cities": {
+            "get": {
+                "tags": [
+                    "Cities"
+                ],
+                "summary": "Вывод списка записей (index())",
+                "description": "Доступ только авторизованным пользователям",
+                "responses": {
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "200": {
+                        "description": "Everything OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CitySchema"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Cities"
+                ],
+                "summary": "Добавление новой записи (store())",
+                "description": "Возвращает новый созданный город",
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CitySchema"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/api/cities/{id}": {
+            "get": {
+                "tags": [
+                    "Cities"
+                ],
+                "summary": "Вывод конкретной записи (show())",
+                "description": "Returns city data",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "City id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CitySchema"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Cities"
+                ],
+                "summary": "Обновление записи (update())",
+                "description": "Returns updated city data",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "City id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CitySchema"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CitySchema"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Cities"
+                ],
+                "summary": "Удаление записи (delete())",
+                "description": "Deletes a record and returns no content",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "City id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/comments": {
+            "get": {
+                "tags": [
+                    "Comments"
+                ],
+                "summary": "Вывод списка записей (index())",
+                "description": "Доступ только авторизованным пользователям",
+                "responses": {
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "200": {
+                        "description": "Everything OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommentSchema"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Comments"
+                ],
+                "summary": "Добавление новой записи (store())",
+                "description": "Возвращает новый созданный citycard",
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommentSchema"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/api/comments/{id}": {
+            "get": {
+                "tags": [
+                    "Comments"
+                ],
+                "summary": "Вывод конкретной записи (show())",
+                "description": "Returns citycard data",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "City id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommentSchema"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Comments"
+                ],
+                "summary": "Обновление записи (update())",
+                "description": "Returns updated citycard data",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "City id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CommentSchema"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CommentSchema"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Comments"
+                ],
+                "summary": "Удаление записи (delete())",
+                "description": "Deletes a record and returns no content",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "City id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/hotels": {
+            "get": {
+                "tags": [
+                    "Hotels"
+                ],
+                "summary": "Вывод списка записей (index())",
+                "description": "Доступ только авторизованным пользователям",
+                "responses": {
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "200": {
+                        "description": "Everything OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HotelSchema"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Hotels"
+                ],
+                "summary": "Добавление новой записи (store())",
+                "description": "Возвращает новый созданный hotel",
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HotelSchema"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/api/hotels/{id}": {
+            "get": {
+                "tags": [
+                    "Hotels"
+                ],
+                "summary": "Вывод конкретной записи (show())",
+                "description": "Returns hotel data",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Hotel id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HotelSchema"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Hotels"
+                ],
+                "summary": "Обновление записи (update())",
+                "description": "Returns updated hotel data",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Hotel id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/HotelSchema"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HotelSchema"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Hotels"
+                ],
+                "summary": "Удаление записи (delete())",
+                "description": "Deletes a record and returns no content",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Hotel id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/persons": {
+            "get": {
+                "tags": [
+                    "Persons"
+                ],
+                "summary": "Вывод списка записей (index())",
+                "description": "Доступ только авторизованным пользователям",
+                "responses": {
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "200": {
+                        "description": "Everything OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PersonSchema"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Persons"
+                ],
+                "summary": "Добавление новой записи (store())",
+                "description": "Возвращает новый созданный город",
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PersonSchema"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/api/persons/{id}": {
+            "get": {
+                "tags": [
+                    "Persons"
+                ],
+                "summary": "Вывод конкретной записи (show())",
+                "description": "Returns person data",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Person id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PersonSchema"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Persons"
+                ],
+                "summary": "Обновление записи (update())",
+                "description": "Returns updated person data",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Person id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PersonSchema"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PersonSchema"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Persons"
+                ],
+                "summary": "Удаление записи (delete())",
+                "description": "Deletes a record and returns no content",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Person id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/routes": {
+            "get": {
+                "tags": [
+                    "ReadyRoutes"
+                ],
+                "summary": "Вывод списка записей (index())",
+                "description": "Доступ только авторизованным пользователям",
+                "responses": {
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "200": {
+                        "description": "Everything OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ReadyRoutesSchema"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "ReadyRoutes"
+                ],
+                "summary": "Добавление новой записи (store())",
+                "description": "Возвращает новый созданный route",
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ReadyRoutesSchema"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/api/routes/{id}": {
+            "get": {
+                "tags": [
+                    "ReadyRoutes"
+                ],
+                "summary": "Вывод конкретной записи (show())",
+                "description": "Returns route data",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Route id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ReadyRoutesSchema"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "ReadyRoutes"
+                ],
+                "summary": "Обновление записи (update())",
+                "description": "Returns updated route data",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Route id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ReadyRoutesSchema"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ReadyRoutesSchema"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "ReadyRoutes"
+                ],
+                "summary": "Удаление записи (delete())",
+                "description": "Deletes a record and returns no content",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Route id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/requests": {
+            "get": {
+                "tags": [
+                    "Requests"
+                ],
+                "summary": "Вывод списка записей (index())",
+                "description": "Доступ только авторизованным пользователям",
+                "responses": {
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "200": {
+                        "description": "Everything OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RequestsSchema"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Requests"
+                ],
+                "summary": "Добавление новой записи (store())",
+                "description": "Возвращает новый созданный route",
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RequestsSchema"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/api/requests/{id}": {
+            "get": {
+                "tags": [
+                    "Requests"
+                ],
+                "summary": "Вывод конкретной записи (show())",
+                "description": "Returns request data",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Route id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RequestsSchema"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Requests"
+                ],
+                "summary": "Обновление записи (update())",
+                "description": "Returns updated request data",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Request id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RequestsSchema"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RequestsSchema"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Requests"
+                ],
+                "summary": "Удаление записи (delete())",
+                "description": "Deletes a record and returns no content",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Request id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/reservings": {
+            "get": {
+                "tags": [
+                    "Reservings"
+                ],
+                "summary": "Вывод списка записей (index())",
+                "description": "Доступ только авторизованным пользователям",
+                "responses": {
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "200": {
+                        "description": "Everything OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ReservingSchema"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Reservings"
+                ],
+                "summary": "Добавление новой записи (store())",
+                "description": "Возвращает новый созданный route",
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ReservingSchema"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/api/reservings/{id}": {
+            "get": {
+                "tags": [
+                    "Reservings"
+                ],
+                "summary": "Вывод конкретной записи (show())",
+                "description": "Returns reserving data",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Route id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ReservingSchema"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Reservings"
+                ],
+                "summary": "Обновление записи (update())",
+                "description": "Returns updated reserving data",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Reserving id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ReservingSchema"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ReservingSchema"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Reservings"
+                ],
+                "summary": "Удаление записи (delete())",
+                "description": "Deletes a record and returns no content",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Reserving id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/reviews": {
+            "get": {
+                "tags": [
+                    "Reviews"
+                ],
+                "summary": "Вывод списка записей (index())",
+                "description": "Доступ только авторизованным пользователям",
+                "responses": {
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "200": {
+                        "description": "Everything OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ReviewSchema"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Reviews"
+                ],
+                "summary": "Добавление новой записи (store())",
+                "description": "Возвращает новый созданный reviews",
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ReviewSchema"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/api/reviews/{id}": {
+            "get": {
+                "tags": [
+                    "Reviews"
+                ],
+                "summary": "Вывод конкретной записи (show())",
+                "description": "Returns review data",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Review id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ReviewSchema"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Reviews"
+                ],
+                "summary": "Обновление записи (update())",
+                "description": "Returns updated review data",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Review id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ReviewSchema"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ReviewSchema"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Reviews"
+                ],
+                "summary": "Удаление записи (delete())",
+                "description": "Deletes a record and returns no content",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Review id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/rooms": {
+            "get": {
+                "tags": [
+                    "Rooms"
+                ],
+                "summary": "Вывод списка записей (index())",
+                "description": "Доступ только авторизованным пользователям",
+                "responses": {
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "200": {
+                        "description": "Everything OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RoomSchema"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Rooms"
+                ],
+                "summary": "Добавление новой записи (store())",
+                "description": "Возвращает новый созданный room",
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RoomSchema"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/api/rooms/{id}": {
+            "get": {
+                "tags": [
+                    "Rooms"
+                ],
+                "summary": "Вывод конкретной записи (show())",
+                "description": "Returns room data",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Room id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RoomSchema"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Rooms"
+                ],
+                "summary": "Обновление записи (update())",
+                "description": "Returns updated room data",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Room id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RoomSchema"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RoomSchema"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Rooms"
+                ],
+                "summary": "Удаление записи (delete())",
+                "description": "Deletes a record and returns no content",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Room id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/services": {
+            "get": {
+                "tags": [
+                    "Services"
+                ],
+                "summary": "Вывод списка записей (index())",
+                "description": "Доступ только авторизованным пользователям",
+                "responses": {
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "200": {
+                        "description": "Everything OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ServiceSchema"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Services"
+                ],
+                "summary": "Добавление новой записи (store())",
+                "description": "Возвращает новый созданный service",
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ServiceSchema"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/api/services/{id}": {
+            "get": {
+                "tags": [
+                    "Services"
+                ],
+                "summary": "Вывод конкретной записи (show())",
+                "description": "Returns service data",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Service id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ServiceSchema"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Services"
+                ],
+                "summary": "Обновление записи (update())",
+                "description": "Returns updated service data",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Service id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ServiceSchema"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ServiceSchema"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Services"
+                ],
+                "summary": "Удаление записи (delete())",
+                "description": "Deletes a record and returns no content",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Service id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/showplaces": {
+            "get": {
+                "tags": [
+                    "Showplaces"
+                ],
+                "summary": "Вывод списка записей (index())",
+                "description": "Доступ только авторизованным пользователям",
+                "responses": {
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "200": {
+                        "description": "Everything OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ShowplacesSchema"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Showplaces"
+                ],
+                "summary": "Добавление новой записи (store())",
+                "description": "Возвращает новый созданный showplace",
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ShowplacesSchema"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/api/showplaces/{id}": {
+            "get": {
+                "tags": [
+                    "Showplaces"
+                ],
+                "summary": "Вывод конкретной записи (show())",
+                "description": "Returns showplace data",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Showplace id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ShowplacesSchema"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Showplaces"
+                ],
+                "summary": "Обновление записи (update())",
+                "description": "Returns updated showplace data",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Showplace id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ShowplacesSchema"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ShowplacesSchema"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Showplaces"
+                ],
+                "summary": "Удаление записи (delete())",
+                "description": "Deletes a record and returns no content",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Showplace id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/themes": {
+            "get": {
+                "tags": [
+                    "Themes"
+                ],
+                "summary": "Вывод списка записей (index())",
+                "description": "Доступ только авторизованным пользователям",
+                "responses": {
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "200": {
+                        "description": "Everything OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ThemesSchema"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Themes"
+                ],
+                "summary": "Добавление новой записи (store())",
+                "description": "Возвращает новый созданный theme",
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ThemesSchema"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/api/themes/{id}": {
+            "get": {
+                "tags": [
+                    "Themes"
+                ],
+                "summary": "Вывод конкретной записи (show())",
+                "description": "Returns theme data",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "theme id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ThemesSchema"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Themes"
+                ],
+                "summary": "Обновление записи (update())",
+                "description": "Returns updated theme data",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Theme id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ThemesSchema"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ThemesSchema"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Themes"
+                ],
+                "summary": "Удаление записи (delete())",
+                "description": "Deletes a record and returns no content",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Theme id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/": {
+            "get": {
+                "description": "Home page",
+                "responses": {
+                    "default": {
+                        "description": "Welcome page"
+                    }
+                }
+            }
+        },
+        "/api/image/public/{id}": {
+            "get": {
+                "tags": [
+                    "Images"
+                ],
+                "summary": "Выгрузка изображения по id (getImage())",
+                "description": "Returns image",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "file name",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "CardCitySchema": {
+                "properties": {
+                    "id": {
+                        "description": "CityCard ID",
+                        "type": "integer",
+                        "example": "1",
+                        "nullable": false
+                    },
+                    "city_id": {
+                        "description": "Foreign key city",
+                        "type": "integer",
+                        "example": "1",
+                        "nullable": false
+                    },
+                    "name": {
+                        "description": "Заголовок артикля",
+                        "type": "string",
+                        "example": "Поговорим о городе Казань",
+                        "nullable": false
+                    },
+                    "description": {
+                        "description": "Описание города",
+                        "type": "string",
+                        "example": "Казань – один из старейших городов России расположен на берегу Волги, в 820-ти километрах от Москвы. Столица Татарстана, где проживают представители 115 национальностей. Более 50% населения татары, на втором месте по численности – русские. Русский и татарский являются государственными и равноправными языками.",
+                        "nullable": false
+                    },
+                    "photo": {
+                        "description": "Путь до файла",
+                        "type": "text",
+                        "example": "Казань",
+                        "nullable": false
+                    },
+                    "created_at": {
+                        "description": "Date of citycard creation",
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": false
+                    },
+                    "updated_at": {
+                        "description": "Date of last updating citycard data",
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": false
+                    }
+                },
+                "type": "object"
+            },
+            "CitySchema": {
+                "properties": {
+                    "id": {
+                        "description": "City ID",
+                        "type": "integer",
+                        "example": "1",
+                        "nullable": false
+                    },
+                    "name": {
+                        "description": "User Name",
+                        "type": "string",
+                        "example": "Казань",
+                        "nullable": false
+                    },
+                    "created_at": {
+                        "description": "Date of city creation",
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": false
+                    },
+                    "updated_at": {
+                        "description": "Date of last updating city data",
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": false
+                    }
+                },
+                "type": "object"
+            },
+            "CommentSchema": {
+                "properties": {
+                    "id": {
+                        "description": "Comment ID",
+                        "type": "integer",
+                        "example": "1",
+                        "nullable": false
+                    },
+                    "user_id": {
+                        "description": "Foreign key user",
+                        "type": "integer",
+                        "example": "1",
+                        "nullable": false
+                    },
+                    "theme_id": {
+                        "description": "Foreign key user",
+                        "type": "integer",
+                        "example": "1",
+                        "nullable": false
+                    },
+                    "comment": {
+                        "description": "Комментарий пользователя",
+                        "type": "string",
+                        "example": "Мы тоже посетили вчера Казань. Было круто!",
+                        "nullable": false
+                    },
+                    "created_at": {
+                        "description": "Date of comment creation",
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": false
+                    },
+                    "updated_at": {
+                        "description": "Date of last updating comment data",
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": false
+                    }
+                },
+                "type": "object"
+            },
+            "HotelSchema": {
+                "properties": {
+                    "id": {
+                        "description": "Hotel ID",
+                        "type": "integer",
+                        "example": "1",
+                        "nullable": false
+                    },
+                    "user_id": {
+                        "description": "Foreign key user",
+                        "type": "integer",
+                        "example": "1",
+                        "nullable": false
+                    },
+                    "city_id": {
+                        "description": "Foreign key city",
+                        "type": "integer",
+                        "example": "1",
+                        "nullable": false
+                    },
+                    "name": {
+                        "description": "Название отеля",
+                        "type": "string",
+                        "example": "Diamond resort",
+                        "nullable": false
+                    },
+                    "stars": {
+                        "description": "Количесвто звезд",
+                        "type": "enum",
+                        "example": "5",
+                        "nullable": false
+                    },
+                    "location": {
+                        "description": "Адрес отеля",
+                        "type": "text",
+                        "example": "Москва, ул Бориса Галушкина, д 9",
+                        "nullable": false
+                    },
+                    "created_at": {
+                        "description": "Date of comment creation",
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": false
+                    },
+                    "updated_at": {
+                        "description": "Date of last updating comment data",
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": false
+                    }
+                },
+                "type": "object"
+            },
+            "PersonSchema": {
+                "properties": {
+                    "id": {
+                        "description": "Person ID",
+                        "type": "integer",
+                        "example": "1",
+                        "nullable": false
+                    },
+                    "hotel_id": {
+                        "description": "Foreign key hotel",
+                        "type": "integer",
+                        "example": "1",
+                        "nullable": false
+                    },
+                    "name": {
+                        "description": "Customer Name",
+                        "type": "string",
+                        "example": "Иван",
+                        "nullable": false
+                    },
+                    "lastname": {
+                        "description": "Customer lasname",
+                        "type": "string",
+                        "example": "Иванов",
+                        "nullable": false
+                    },
+                    "patronymic": {
+                        "description": "Customer patronymic",
+                        "type": "string",
+                        "example": "Иванович",
+                        "nullable": false
+                    },
+                    "passport": {
+                        "description": "Customer passport",
+                        "type": "string",
+                        "example": "4524761611",
+                        "nullable": false
+                    },
+                    "email": {
+                        "description": "Customer email",
+                        "type": "string",
+                        "example": "example@test.ru",
+                        "nullable": false
+                    },
+                    "phone": {
+                        "description": "Customer phone",
+                        "type": "string",
+                        "example": "79999999999",
+                        "nullable": false
+                    },
+                    "created_at": {
+                        "description": "Date of person creation",
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": false
+                    },
+                    "updated_at": {
+                        "description": "Date of last updating person data",
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": false
+                    }
+                },
+                "type": "object"
+            },
+            "ReadyRoutesSchema": {
+                "properties": {
+                    "id": {
+                        "description": "ReadyRoute ID",
+                        "type": "integer",
+                        "example": "1",
+                        "nullable": false
+                    },
+                    "city_id": {
+                        "description": "Foreign key city",
+                        "type": "integer",
+                        "example": "1",
+                        "nullable": false
+                    },
+                    "name": {
+                        "description": "Route Name",
+                        "type": "string",
+                        "example": "Музеи в Казане",
+                        "nullable": false
+                    },
+                    "description": {
+                        "description": "Описание маршрута",
+                        "type": "string",
+                        "example": "Посетим по Казани около 10 музеев",
+                        "nullable": false
+                    },
+                    "duration": {
+                        "description": "Продолжительность маршрута",
+                        "type": "string",
+                        "example": "10 часов",
+                        "nullable": false
+                    },
+                    "photo": {
+                        "description": "Путь до файла",
+                        "type": "text",
+                        "example": "file/file/name.png",
+                        "nullable": false
+                    },
+                    "created_at": {
+                        "description": "Date of route creation",
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": false
+                    },
+                    "updated_at": {
+                        "description": "Date of last updating route data",
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": false
+                    }
+                },
+                "type": "object"
+            },
+            "RequestsSchema": {
+                "properties": {
+                    "id": {
+                        "description": "Request ID",
+                        "type": "integer",
+                        "example": "1",
+                        "nullable": false
+                    },
+                    "service_id": {
+                        "description": "Foreign key service",
+                        "type": "integer",
+                        "example": "1",
+                        "nullable": false
+                    },
+                    "client_id": {
+                        "description": "Foreign key service",
+                        "type": "integer",
+                        "example": "1",
+                        "nullable": false
+                    },
+                    "client_phone": {
+                        "description": "Номер пользователя, кто оставил заявку на экскурсию",
+                        "type": "string",
+                        "example": "9786666666",
+                        "nullable": false
+                    },
+                    "client_name": {
+                        "description": "Имя пользователя, кто оставил заявку на экскурсию",
+                        "type": "string",
+                        "example": "Арина",
+                        "nullable": false
+                    },
+                    "message": {
+                        "description": "Сообщение пользователя",
+                        "type": "text",
+                        "example": "Хотим попасть к вам на экскурсию по Казани",
+                        "nullable": false
+                    },
+                    "created_at": {
+                        "description": "Date of route creation",
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": false
+                    },
+                    "updated_at": {
+                        "description": "Date of last updating route data",
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": false
+                    }
+                },
+                "type": "object"
+            },
+            "ReservingSchema": {
+                "properties": {
+                    "id": {
+                        "description": "Reserving ID",
+                        "type": "integer",
+                        "example": "1",
+                        "nullable": false
+                    },
+                    "person_id": {
+                        "description": "Foreign key person",
+                        "type": "integer",
+                        "example": "1",
+                        "nullable": false
+                    },
+                    "room_id": {
+                        "description": "Foreign key room",
+                        "type": "integer",
+                        "example": "1",
+                        "nullable": false
+                    },
+                    "type_food": {
+                        "description": "Тип питания в отеле",
+                        "type": "enum",
+                        "example": "BB",
+                        "nullable": false
+                    },
+                    "arrival_time": {
+                        "description": "День прибытия",
+                        "type": "string",
+                        "example": "date",
+                        "nullable": false
+                    },
+                    "departure_time": {
+                        "description": "День отбытия",
+                        "type": "string",
+                        "example": "date",
+                        "nullable": false
+                    },
+                    "created_at": {
+                        "description": "Date of route creation",
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": false
+                    },
+                    "updated_at": {
+                        "description": "Date of last updating route data",
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": false
+                    }
+                },
+                "type": "object"
+            },
+            "ReviewSchema": {
+                "properties": {
+                    "id": {
+                        "description": "Review ID",
+                        "type": "integer",
+                        "example": "1",
+                        "nullable": false
+                    },
+                    "city_id": {
+                        "description": "Foreign key city",
+                        "type": "integer",
+                        "example": "1",
+                        "nullable": false
+                    },
+                    "showplaces_id": {
+                        "description": "Foreign key showplaces",
+                        "type": "integer",
+                        "example": "1",
+                        "nullable": false
+                    },
+                    "user_id": {
+                        "description": "Foreign key user",
+                        "type": "integer",
+                        "example": "1",
+                        "nullable": false
+                    },
+                    "type": {
+                        "description": "На что отзыв",
+                        "type": "enum",
+                        "example": "city",
+                        "nullable": false
+                    },
+                    "name": {
+                        "description": "Короткое название отзыва",
+                        "type": "string",
+                        "example": "Понравилось.",
+                        "nullable": false
+                    },
+                    "description": {
+                        "description": "Отзыв",
+                        "type": "string",
+                        "example": "Развитая инфраструктура, удобный общественный транспорт.",
+                        "nullable": false
+                    },
+                    "created_at": {
+                        "description": "Date of route creation",
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": false
+                    },
+                    "updated_at": {
+                        "description": "Date of last updating route data",
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": false
+                    }
+                },
+                "type": "object"
+            },
+            "RoomSchema": {
+                "properties": {
+                    "id": {
+                        "description": "Room ID",
+                        "type": "integer",
+                        "example": "1",
+                        "nullable": false
+                    },
+                    "hotel_id": {
+                        "description": "Foreign key hotel",
+                        "type": "integer",
+                        "example": "1",
+                        "nullable": false
+                    },
+                    "type": {
+                        "description": "Тип комнаты",
+                        "type": "enum",
+                        "example": "standard double",
+                        "nullable": false
+                    },
+                    "price": {
+                        "description": "Стоимость номера",
+                        "type": "number",
+                        "format": "float",
+                        "example": "10500.99",
+                        "nullable": false
+                    },
+                    "status": {
+                        "description": "Занят номер (0) или нет (1)",
+                        "type": "tinyint",
+                        "example": "0",
+                        "nullable": false
+                    },
+                    "created_at": {
+                        "description": "Date of route creation",
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": false
+                    },
+                    "updated_at": {
+                        "description": "Date of last updating route data",
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": false
+                    }
+                },
+                "type": "object"
+            },
+            "ServiceSchema": {
+                "properties": {
+                    "id": {
+                        "description": "Service ID",
+                        "type": "integer",
+                        "example": "1",
+                        "nullable": false
+                    },
+                    "city_id": {
+                        "description": "Foreign key city",
+                        "type": "integer",
+                        "example": "1",
+                        "nullable": false
+                    },
+                    "user_id": {
+                        "description": "Foreign key user",
+                        "type": "integer",
+                        "example": "standard double",
+                        "nullable": false
+                    },
+                    "name": {
+                        "description": "Название короткое услуги",
+                        "type": "string",
+                        "example": "10500.99",
+                        "nullable": false
+                    },
+                    "description": {
+                        "description": "Описание экскурсии/услуги",
+                        "type": "string",
+                        "example": "Экскурсия по Казани",
+                        "nullable": false
+                    },
+                    "price": {
+                        "description": "Стоимость услуги",
+                        "type": "number",
+                        "format": "float",
+                        "example": "1500.67",
+                        "nullable": false
+                    },
+                    "type": {
+                        "description": "Тип экскурсии",
+                        "type": "enum",
+                        "example": "Индивидуальный",
+                        "nullable": false
+                    },
+                    "kind": {
+                        "description": "Вид экскурсии",
+                        "type": "enum",
+                        "example": "Городской",
+                        "nullable": false
+                    },
+                    "created_at": {
+                        "description": "Date of service creation",
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": false
+                    },
+                    "updated_at": {
+                        "description": "Date of last updating service data",
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": false
+                    }
+                },
+                "type": "object"
+            },
+            "ShowplacesSchema": {
+                "properties": {
+                    "id": {
+                        "description": "Showplace ID",
+                        "type": "integer",
+                        "example": "1",
+                        "nullable": false
+                    },
+                    "city_card_id": {
+                        "description": "Foreign key citycard",
+                        "type": "integer",
+                        "example": "1",
+                        "nullable": false
+                    },
+                    "name": {
+                        "description": "Название короткое достопримечательности",
+                        "type": "string",
+                        "example": "Музей им Пушкина",
+                        "nullable": false
+                    },
+                    "description": {
+                        "description": "Описание достопримечательности",
+                        "type": "string",
+                        "example": "Госуда́рственный музе́й изобрази́тельных иску́сств и́мени А. С. Пу́шкина — московский музей зарубежного искусства, основанный профессором Московского университета Иваном Цветаевым в 1912 году как «Музей изящных искусств имени императора Александра III при Императорском Московском университете».",
+                        "nullable": false
+                    },
+                    "type": {
+                        "description": "Тип достопримечательности",
+                        "type": "enum",
+                        "example": "museum",
+                        "nullable": false
+                    },
+                    "photo": {
+                        "description": "Путь до фото",
+                        "type": "text",
+                        "example": "File/file/photo.png",
+                        "nullable": false
+                    },
+                    "created_at": {
+                        "description": "Date of showplace creation",
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": false
+                    },
+                    "updated_at": {
+                        "description": "Date of last updating showplace data",
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": false
+                    }
+                },
+                "type": "object"
+            },
+            "ThemesSchema": {
+                "properties": {
+                    "id": {
+                        "description": "Themes ID",
+                        "type": "integer",
+                        "example": "1",
+                        "nullable": false
+                    },
+                    "user_id": {
+                        "description": "Foreign key user",
+                        "type": "integer",
+                        "example": "1",
+                        "nullable": false
+                    },
+                    "description": {
+                        "description": "Название темы",
+                        "type": "text",
+                        "example": "Какие места с темой природы посетить в Казани?",
+                        "nullable": false
+                    },
+                    "type": {
+                        "description": "К какому типу относится тема обсуждения",
+                        "type": "enum",
+                        "example": "showplace",
+                        "nullable": false
+                    },
+                    "photo": {
+                        "description": "Путь до фото",
+                        "type": "text",
+                        "example": "File/file/photo.png",
+                        "nullable": false
+                    },
+                    "created_at": {
+                        "description": "Date of theme creation",
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": false
+                    },
+                    "updated_at": {
+                        "description": "Date of last updating theme data",
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": false
+                    }
+                },
+                "type": "object"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Cities",
+            "description": "Города"
+        },
+        {
+            "name": "CityCards",
+            "description": "Карточка городов"
+        },
+        {
+            "name": "Comments",
+            "description": "Комментарии к темам"
+        },
+        {
+            "name": "Hotels",
+            "description": "Отели"
+        },
+        {
+            "name": "Persons",
+            "description": "Гости отеля"
+        },
+        {
+            "name": "ReadyRoutes",
+            "description": "Готовый маршруты"
+        },
+        {
+            "name": "Requests",
+            "description": "Заявки пользователей на экскурсионные услуги"
+        },
+        {
+            "name": "Reservings",
+            "description": "Бронь гостя(связь с отелем через rooms)"
+        },
+        {
+            "name": "Reviews",
+            "description": "Отзывы"
+        },
+        {
+            "name": "Rooms",
+            "description": "Комнаты в отелях"
+        },
+        {
+            "name": "Services",
+            "description": "Предоставляемые услуги гидом"
+        },
+        {
+            "name": "Showplaces",
+            "description": "Достопримечательности"
+        },
+        {
+            "name": "Themes",
+            "description": "Темы обсуждения форума"
+        },
+        {
+            "name": "Images",
+            "description": "Получение изображения"
+        }
+    ]
+}

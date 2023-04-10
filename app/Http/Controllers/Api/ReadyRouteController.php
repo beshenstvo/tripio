@@ -11,6 +11,222 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
+/**
+ * @OA\Schema(
+ *    schema="ReadyRoutesSchema",
+ *    @OA\Property(
+ *        property="id",
+ *        type="integer",
+ *        description="ReadyRoute ID",
+ *        nullable=false,
+ *        example="1"
+ *    ),
+ *    @OA\Property(
+ *        property="city_id",
+ *        type="integer",
+ *        description="Foreign key city",
+ *        nullable=false,
+ *        example="1"
+ *    ),
+ *    @OA\Property(
+ *        property="name",
+ *        type="string",
+ *        description="Route Name",
+ *        nullable=false,
+ *        example="Музеи в Казане"
+ *    ),
+ *    @OA\Property(
+ *        property="description",
+ *        type="string",
+ *        description="Описание маршрута",
+ *        nullable=false,
+ *        example="Посетим по Казани около 10 музеев"
+ *    ),
+ *     @OA\Property(
+ *        property="duration",
+ *        type="string",
+ *        description="Продолжительность маршрута",
+ *        nullable=false,
+ *        example="10 часов"
+ *    ),
+ *     @OA\Property(
+ *        property="photo",
+ *        type="text",
+ *        description="Путь до файла",
+ *        nullable=false,
+ *        example="file/file/name.png"
+ *    ),
+ *    @OA\Property(
+ *        property="created_at",
+ *        type="string",
+ *        description="Date of route creation",
+ *        nullable=false,
+ *        format="date-time"
+ *    ),
+ *    @OA\Property(
+ *        property="updated_at",
+ *        type="string",
+ *        description="Date of last updating route data",
+ *        nullable=false,
+ *        format="date-time"
+ *    ),
+ * )
+ * 
+ * 
+ * 
+ * @OA\Get(
+ *     path="/api/routes",
+ *     tags={"ReadyRoutes"},
+ *     summary="Вывод списка записей (index())",
+ *     description="Доступ только авторизованным пользователям",
+ *     @OA\Response(
+ *         response=403,
+ *         description="Forbidden"
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Everything OK",
+*         @OA\JsonContent(
+*               ref="#/components/schemas/ReadyRoutesSchema"
+*            )
+*     ),
+*       @OA\Response(
+*          response=401,
+*          description="Unauthenticated",
+*      ),     
+* )
+*
+* @OA\Post(
+*      path="/api/routes",
+*      tags={"ReadyRoutes"},
+*      summary="Добавление новой записи (store())",
+*      description="Возвращает новый созданный route",
+*      @OA\Response(
+*          response=201,
+*          description="Successful operation",
+*          @OA\JsonContent(ref="#/components/schemas/ReadyRoutesSchema")
+*       ),
+*      @OA\Response(
+*          response=400,
+*          description="Bad Request"
+*      ),
+*      @OA\Response(
+*          response=401,
+*          description="Unauthenticated",
+*      ),
+*      @OA\Response(
+*          response=403,
+*          description="Forbidden"
+*      )
+* )
+
+* @OA\Get(
+*      path="/api/routes/{id}",
+*      tags={"ReadyRoutes"},
+*      summary="Вывод конкретной записи (show())",
+*      description="Returns route data",
+*      @OA\Parameter(
+*          name="id",
+*          description="Route id",
+*          required=true,
+*          in="path",
+*          @OA\Schema(
+*              type="integer"
+*          )
+*      ),
+*      @OA\Response(
+*          response=200,
+*          description="Successful operation",
+*          @OA\JsonContent(ref="#/components/schemas/ReadyRoutesSchema")
+*       ),
+*      @OA\Response(
+*          response=400,
+*          description="Bad Request"
+*      ),
+*      @OA\Response(
+*          response=401,
+*          description="Unauthenticated",
+*      ),
+*      @OA\Response(
+*          response=403,
+*          description="Forbidden"
+*      )
+* )
+*
+* @OA\Put(
+*      path="/api/routes/{id}",
+*      tags={"ReadyRoutes"},
+*      summary="Обновление записи (update())",
+*      description="Returns updated route data",
+*      @OA\Parameter(
+*          name="id",
+*          description="Route id",
+*          required=true,
+*          in="path",
+*          @OA\Schema(
+*              type="integer"
+*          )
+*      ),
+*      @OA\RequestBody(
+*          required=true,
+*          @OA\JsonContent(ref="#/components/schemas/ReadyRoutesSchema")
+*      ),
+*      @OA\Response(
+*          response=200,
+*          description="Successful operation",
+*          @OA\JsonContent(ref="#/components/schemas/ReadyRoutesSchema")
+*       ),
+*      @OA\Response(
+*          response=400,
+*          description="Bad Request"
+*      ),
+*      @OA\Response(
+*          response=401,
+*          description="Unauthenticated",
+*      ),
+*      @OA\Response(
+*          response=403,
+*          description="Forbidden"
+*      ),
+*      @OA\Response(
+*          response=404,
+*          description="Resource Not Found"
+*      )
+* )
+
+* @OA\Delete(
+*      path="/api/routes/{id}",
+*      tags={"ReadyRoutes"},
+*      summary="Удаление записи (delete())",
+*      description="Deletes a record and returns no content",
+*      @OA\Parameter(
+*          name="id",
+*          description="Route id",
+*          required=true,
+*          in="path",
+*          @OA\Schema(
+*              type="integer"
+*          )
+*      ),
+*      @OA\Response(
+*          response=204,
+*          description="Successful operation",
+*          @OA\JsonContent()
+*       ),
+*      @OA\Response(
+*          response=401,
+*          description="Unauthenticated",
+*      ),
+*      @OA\Response(
+*          response=403,
+*          description="Forbidden"
+*      ),
+*      @OA\Response(
+*          response=404,
+*          description="Resource Not Found"
+*      )
+* )
+*/
 class ReadyRouteController extends Controller
 {
     /**

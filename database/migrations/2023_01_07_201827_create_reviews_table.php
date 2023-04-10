@@ -15,7 +15,8 @@ class CreateReviewsTable extends Migration
     {
         Schema::create('reviews', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('city_id')->constrained('cities')->onDelete('cascade');
+            $table->foreignId('city_id')->nullable()->constrained('cities')->onDelete('cascade');
+            $table->foreignId('showplaces_id')->nullable()->constrained('showplaces')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->enum('type', ['showplace', 'city']);
             $table->string('name', 255);

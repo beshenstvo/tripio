@@ -13,9 +13,15 @@ use App\Http\Controllers\Api\RoomController;
 use App\Http\Controllers\Api\ServiceController;
 use App\Http\Controllers\Api\ShowPlaceController;
 use App\Http\Controllers\Api\ThemeController;
+use App\Http\Controllers\Auth\AdminAuthenticationController;
+use App\Http\Controllers\Auth\GuideAuthenticationController;
+use App\Http\Controllers\Auth\UserAuthenticationController as AuthUserAuthenticationController;
 use App\Http\Controllers\ImageController;
+use GuzzleHttp\Middleware;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
+use function PHPUnit\Framework\returnSelf;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,24 +34,41 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
+# регистрация пользователя
+Route::post('register', [AuthUserAuthenticationController::class, 'register'])->name('register');
+Route::post('login', [AuthUserAuthenticationController::class, 'login'])->name('login');
+Route::post('logout', [AuthUserAuthenticationController::class, 'logout'])->name('logout');
+
+# регистрация пользователя
+Route::post('/admin.register', [AdminAuthenticationController::class, 'register'])->name('admin.register');
+Route::post('/admin.login', [AdminAuthenticationController::class, 'login'])->name('admin.login');
+Route::post('/admin.logout', [AdminAuthenticationController::class, 'logout'])->name('admin.logout');
+
+# регистрация giude
+Route::post('/guide.register', [GuideAuthenticationController::class, 'register'])->name('giude.register');
+Route::post('/guide.login', [GuideAuthenticationController::class, 'login'])->name('giude.login');
+Route::post('/guide.logout', [GuideAuthenticationController::class, 'logout'])->name('giude.logout');
+
+Route::group(['middleware' => 'auth:sanctum'], function () {
+    Route::apiResources([
+        'themes' =>ThemeController::class,
+        'citycards' => CardCityController::class,
+        'routes' => ReadyRouteController::class,
+        'cities' => CityController::class,
+        'comments' => CommentController::class,
+        'hotels' => HotelController::class,
+        'persons' => PersonController::class,
+        'requests' => RequestController::class,
+        'services' => ServiceController::class,
+        'reservings' => ReservingController::class,
+        'reviews' => ReviewController::class,
+        'rooms' => RoomController::class,
+        'showplaces' => ShowPlaceController::class
+    ]);
+});
+
+Route::middleware('auth:sanctum')->get('/user', function(Request $request) {
+    return $request->user();
+});
 
 Route::get('image/{path}', [ImageController::class, 'getImage'])->where('path', '.*');
-
-Route::apiResources([
-    'themes' =>ThemeController::class,
-    'citycards' => CardCityController::class,
-	'routes' => ReadyRouteController::class,
-    'cities' => CityController::class,
-    'comments' => CommentController::class,
-    'hotels' => HotelController::class,
-    'persons' => PersonController::class,
-    'requests' => RequestController::class,
-    'services' => ServiceController::class,
-    'reservings' => ReservingController::class,
-    'reviews' => ReviewController::class,
-    'rooms' => RoomController::class,
-    'showplaces' => ShowPlaceController::class
-]);
