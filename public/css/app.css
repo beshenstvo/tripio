@@ -10836,3 +10836,11 @@ body {
 .main {
   flex: 1 1 auto;
 }
+
+.sidebar {
+  background-color: white !important;
+}
+
+body {
+  background-color: #f3f1ff;
+}

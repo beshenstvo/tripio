@@ -1,5 +1,5 @@
 <template>
-  <div class="sidebar">
+  <div class="sidebar" style="width: 16%;">
     <ul class="nav flex-column">
       <li class="p-4" style="text-align: center">
         <img src="/api/image/public/logo.svg" alt="logo" width="90" >
@@ -66,7 +66,7 @@ export default {
             localStorage.removeItem('token')
             localStorage.removeItem('isLoggedIn')
             localStorage.removeItem('role')
-            this.$router.push('/admin.login')
+            this.$router.push('/admin/login')
         }).catch((errors) => {
             console.log(errors);
         })
@@ -77,7 +77,7 @@ export default {
 
 <style scoped>
 .sidebar {
-  /* position: fixed; */
+  position: fixed;
   top: 0;
   bottom: 0;
   left: 0;

@@ -71,3 +71,4 @@ class UserAuthenticationController extends Controller
         $request->session()->regenerateToken();
     }
 }
+//delete

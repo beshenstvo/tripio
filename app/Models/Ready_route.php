@@ -9,6 +9,10 @@ class Ready_route extends Model
 {
     use HasFactory;
 
+    public function cities() {
+        return $this->belongsTo(City::class, 'city_id');
+    }
+
     protected $fillable = [
         'city_id',
         'name',

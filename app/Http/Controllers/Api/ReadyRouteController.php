@@ -236,7 +236,7 @@ class ReadyRouteController extends Controller
      */
     public function index()
     {
-        return ReadyRouteResource::collection(Ready_route::all());
+        return ReadyRouteResource::collection(Ready_route::with('cities')->orderBy('id', 'desc')->paginate(2));
     }
 
     /**
@@ -273,10 +273,6 @@ class ReadyRouteController extends Controller
                 'message' => 'Something went wrong'
             ], 500);
         }
-        
-        // $newRoute = Ready_route::create($request->validated());
-
-        // return new ReadyRouteResource($newRoute);
     }
 
     /**
@@ -326,10 +322,6 @@ class ReadyRouteController extends Controller
                 'message' => 'Something went wrong'
             ], 500);
         }
-
-        // $route->update($request->validated());
-
-        // return new ReadyRouteResource($route);
     }
 
     /**
