@@ -232,9 +232,32 @@ class RequestController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return RequestResource::collection(ModelsRequest::all());
+        $query = ModelsRequest::query();
+
+        if ($request->has('archive') && $request->input('archive') == 0) {
+          $query->where('archive', 0);
+        } else {
+            $query->where('archive', 1);
+        }
+      
+        $id = auth()->id();
+
+        return RequestResource::collection($query->join('services', 'requests.service_id', '=', 'services.id')
+            ->where('services.user_id', $id)
+            ->orderBy('requests.id', 'DESC')
+            ->groupBy('requests.id')
+            ->select([
+                'requests.id',
+                'requests.service_id',
+                'requests.client_phone',
+                'requests.client_name',
+                'requests.message',
+                'requests.archive'
+                ])
+            ->paginate(5)
+        );
     }
 
     /**

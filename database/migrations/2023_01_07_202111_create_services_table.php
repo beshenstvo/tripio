@@ -19,6 +19,7 @@ class CreateServicesTable extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('name', 255);
             $table->text('description');
+            $table->text('photo');
             $table->string('duration', 20);
             $table->float('price');
             $table->enum('type', ['Индивидуальный', 'Групповой']);

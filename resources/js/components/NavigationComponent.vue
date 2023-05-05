@@ -129,18 +129,26 @@ export default {
         $route() {
             this.currentPath = this.$route.path;
             this.isLoggedIn = localStorage.getItem("isLoggedIn")
-            axios.get('api/user').then((response) => {
+            if(this.isLoggedIn) {
+              window.axios.defaults.headers.common['Authorization'] = `Bearer ${this.token}`;
+              axios.get('api/user').then((response) => {
                 this.currentUser = response.data;
-                })
+                console.log(this.currentUser);
+              })
+            }
         },
     },
     mounted() {
         this.currentPath = this.$route.path;
-        window.axios.defaults.headers.common['Authorization'] = `Bearer ${this.token}`;
-        axios.get('api/user').then((response) => {
+        
+        if(this.isLoggedIn) {
+          window.axios.defaults.headers.common['Authorization'] = `Bearer ${this.token}`;
+          axios.get('api/user').then((response) => {
             this.currentUser = response.data;
             console.log(this.currentUser);
-            })
+          })
+        }
+        
     }
     };
 </script>

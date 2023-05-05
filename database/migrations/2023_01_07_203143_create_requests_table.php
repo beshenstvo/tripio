@@ -16,7 +16,6 @@ class CreateRequestsTable extends Migration
         Schema::create('requests', function (Blueprint $table) {
             $table->id();
             $table->foreignId('service_id')->constrained('services')->onDelete('cascade');
-            $table->foreignId('client_id')->constrained('users')->onDelete('cascade');
             $table->char('client_phone', 10);
             $table->string('client_name', 255);
             $table->text('message');

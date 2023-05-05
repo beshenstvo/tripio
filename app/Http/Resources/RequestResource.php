@@ -17,10 +17,11 @@ class RequestResource extends JsonResource
         return [
             'id' => $this->id,
             'service_id' => $this->service_id,
-            'client_id' => $this->client_id,
             'client_phone' => $this->client_phone,
             'client_name' => $this->client_name,
-            'message' => $this->message
+            'message' => $this->message,
+            'archive' => $this->archive,
+            'service' => $this->service,
         ];
     }
 }

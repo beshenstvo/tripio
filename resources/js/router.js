@@ -35,6 +35,13 @@ const routes = [
     path: "/route",
     name: "Route",
     component: () => import('./views/AuthUser/RouteComponent.vue'),
+    meta: { isAuth: false},
+  },
+  {
+    path: '/route/more-about-route/:id',
+    name: 'MoreAboutRoute',
+    component: () => import('./views/AuthUser/MoreAboutRouteComponent.vue'),
+    props: true,
     meta: { isAuth: false}
   },
   {
@@ -83,6 +90,12 @@ const routes = [
     path: "/admin/readyroute",
     name: "Admin.readyroute",
     component: () => import('./views/AuthAdmin/ReadyRoutesComponent.vue'),
+    meta: { isAuth: true }
+  },
+  {
+    path: "/admin/citycard",
+    name: "Admin.citycard",
+    component: () => import('./views/AuthAdmin/CityCardComponent.vue'),
     meta: { isAuth: true }
   },
   {
@@ -140,7 +153,20 @@ const routes = [
     path: "/guide/request",
     name: "Guide.request",
     component: () => import('./views/AuthGuide/RequestComponent.vue'),
-    meta: { isAuth: true }
+    meta: { isAuth: true },
+    redirect: { name: "Guide.active" }, 
+    children: [
+      {
+        path: "/archive",
+        name: "Guide.archive",
+        component: () => import('./views/AuthGuide/ArchiveComponent.vue')
+      },
+      {
+        path: "/active",
+        name: "Guide.active",
+        component: () => import('./views/AuthGuide/ActiveComponent.vue')
+      }
+    ]
   },
   {
     path: "/guide/notice",
@@ -152,6 +178,12 @@ const routes = [
     path: "/guide/profile",
     name: "Guide.profile",
     component: () => import('./views/AuthGuide/ProfileComponent.vue'),
+    meta: { isAuth: true }
+  },
+  {
+    path: "/guide/verification",
+    name: "Guide.verification",
+    component: () => import('./views/AuthGuide/VerificationComponent.vue'),
     meta: { isAuth: true }
   },
   {

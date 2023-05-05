@@ -51,21 +51,28 @@ Route::post('/guide.logout', [GuideAuthenticationController::class, 'logout'])->
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::apiResources([
-        'themes' =>ThemeController::class,
+        'themes' => ThemeController::class,
         'citycards' => CardCityController::class,
         'routes' => ReadyRouteController::class,
-        'cities' => CityController::class,
         'comments' => CommentController::class,
         'hotels' => HotelController::class,
         'persons' => PersonController::class,
-        'requests' => RequestController::class,
         'services' => ServiceController::class,
         'reservings' => ReservingController::class,
         'reviews' => ReviewController::class,
         'rooms' => RoomController::class,
         'showplaces' => ShowPlaceController::class
     ]);
+    Route::get('/searchService', 'App\Http\Controllers\Api\ServiceController@searchService');
 });
+
+# роуты для гостя
+Route::get('servicesAll', 'App\Http\Controllers\Api\ServiceController@indexAll');
+Route::get('routes', 'App\Http\Controllers\Api\ReadyRouteController@index');
+Route::get('routes/{route}', 'App\Http\Controllers\Api\ReadyRouteController@show');
+Route::apiResource('cities', CityController::class);
+Route::apiResource('requests', RequestController::class);
+
 
 Route::middleware('auth:sanctum')->get('/user', function(Request $request) {
     return $request->user();

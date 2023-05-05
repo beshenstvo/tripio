@@ -9,7 +9,7 @@
       </div>
 
       <div class="col-md-1" style="margin-top: auto; margin-bottom: auto; text-align: end;">
-        <button class="btn btn-outline-primary addButton" @click="showModal = true"><i class="fas fa-plus"></i></button>
+        <button class="btn btn-outline-primary addButton" @click="showModal = true, city_id = '1', name = '', description = '', duration = ''"><i class="fas fa-plus"></i></button>
       </div>
     </div>
 
@@ -27,7 +27,7 @@
                 <div class="row">
                   <div class="col-md-9">
                     <h4 class="card-title" v-html="highlightText(route.name)"></h4>
-                    <p class="card-text" v-html="highlightText(route.description)"></p>
+                    <p class="card-text" v-html="highlightText( $filters.truncate(route.description))"></p>
                   </div> 
                   <div class="col-md-3">
                     <p class="card-text"> <i class="fas fa-clock me-2"></i>Длительность: {{ route.duration }}</p>
@@ -91,7 +91,7 @@
               <form>
                 <div class="mb-3">
                   <label for="route-city">Выберите город маршрута</label>
-                  <select class="form-control" id="route-city" v-model="city_id">
+                  <select class="form-select" id="route-city" v-model="city_id">
                     <option v-for="city in cities" :key="city.id" :value="city.id">{{ city.name }}</option>
                   </select>
                 </div>
@@ -104,11 +104,11 @@
                   <textarea class="form-control" id="route-description" rows="3" placeholder="Введите описание маршрута" v-model="description"></textarea>
                 </div>
                 <div class="mb-3">
-                  <label for="route-duration">Длительность мероприятия</label>
-                  <input type="text" class="form-control" id="route-duration" placeholder="Введите длительность мероприятия" v-model="duration">
+                  <label for="route-duration">Длительность маршрута</label>
+                  <input type="text" class="form-control" id="route-duration" placeholder="Введите длительность маршрута" v-model="duration">
                 </div>
                 <div class="mb-3">
-                  <label for="formFile" class="form-label">Default file input example</label>
+                  <label for="formFile" class="form-label">Изображение</label>
                   <input class="form-control" type="file" id="formFile" @change="handleFileChange">
                 </div>
               </form>
@@ -136,7 +136,7 @@
               <form>
                 <div class="mb-3">
                   <label for="route-city">Выберите город маршрута</label>
-                  <select class="form-control" id="route-city" v-model="city_id">
+                  <select class="form-select" id="route-city" v-model="city_id">
                     <option v-for="city in cities" :key="city.id" :value="city.id">{{ city.name }}</option>
                   </select>
                 </div>
@@ -153,17 +153,17 @@
                   <input type="text" class="form-control" id="route-duration" placeholder="Введите длительность мероприятия" v-model="duration">
                 </div>
                 <div class="mb-3">
-                  <label for="formFile" class="form-label">Default file input example</label>
+                  <label for="formFile" class="form-label">Изображение</label>
                   <div class="text-center mb-2">
-                    <img v-if="file && !checkSelectedInput" class="innerimg" style="width: 50%" :src="'/api/image/public/'+file" alt="">
+                    <img v-if="fileName && !checkSelectedInput" class="innerimg" style="width: 50%" :src="'/api/image/public/'+fileName" alt="">
                   </div>
-                  <input v-if="!checkSelectedInput" type="text" id='photo' name="photo" :value="file"  class="form-control mb-2" disabled>
+                  <input v-if="!checkSelectedInput" type="text" id='photo' name="photo" :value="fileName"  class="form-control mb-2" disabled>
                   <input class="form-control" type="file" id="formFile" @change="handleFileChange" placeholder="tatata">
                 </div>
               </form>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" @click="showModalEditing = false, checkSelectedInput = false, file = ''">Закрыть</button>
+              <button type="button" class="btn btn-secondary" @click="showModalEditing = false, checkSelectedInput = false, fileName = ''">Закрыть</button>
               <button type="button" class="btn btn-primary" :disabled="!isDisabled" @click="saveUpdates(this.id)">Сохранить</button>
             </div>
           </div>
@@ -185,7 +185,7 @@ export default {
       showModal: false, 
       showModalEditing: false,
       id: '',
-      city_id: '',
+      city_id: '1',
       name: '',
       description: '',
       duration: '',
@@ -194,6 +194,14 @@ export default {
       searchText: '',
       checkSelectedInput: false,
       pagination: '',
+      fileName: '',
+      originalRoute: {
+        city_id: '',
+        photo: '',
+        name: '',
+        description: '',
+        duration: ''
+      }, 
     }
   },
   mounted() {
@@ -230,7 +238,6 @@ export default {
           console.log(response.data.data)
           this.data = response.data.data;
           this.pagination = response.data.meta;
-          console.log(this.pagination)
         })
         .catch( error => {
             this.errored = true;
@@ -286,21 +293,74 @@ export default {
               this.errored = true;
           })
       },
-      saveUpdates(id) {
+      async saveUpdates(id) {
+        // let formData = new FormData();
+        // formData.append('_method', 'PUT');
+        // formData.append('city_id', this.city_id);
+        // formData.append('name', this.name);
+        // formData.append('description', this.description);
+        // formData.append('duration', this.duration);
+        // formData.append('photo', this.file);
+
+        // axios.post('/api/routes/'+id, formData)
+        //   .then(response => {
+        //     console.log(response.status);
+        //     if(response.status == 200) {
+        //       this.getReadyRoutes()
+        //       alert('Данные обновлены')
+        //       this.showModalEditing = false
+        //       return
+        //     }
+        //     this.getReadyRoutes()
+        //   })
+        //   .catch( error => {
+        //       console.log(error);
+        //       this.errored = true;
+        //   })
+          
+
+
+        await axios.get('api/routes/'+id).then(response => {
+          this.originalRoute.city_id = response.data.data.city_id
+          this.originalRoute.name = response.data.data.name
+          this.originalRoute.description = response.data.data.description
+          this.originalRoute.duration = response.data.data.duration
+          this.originalRoute.photo = response.data.data.photo
+        })
+        
+        if (
+          this.city_id == this.originalRoute.city_id &&
+          this.name == this.originalRoute.name &&
+          this.description == this.originalRoute.description &&
+          this.duration == this.originalRoute.duration &&
+          !this.checkSelectedImage &&
+          this.fileName == this.originalRoute.photo
+        ) {
+          this.showModalEditing = false;
+          return;
+        }
+
         let formData = new FormData();
         formData.append('_method', 'PUT');
         formData.append('city_id', this.city_id);
         formData.append('name', this.name);
         formData.append('description', this.description);
         formData.append('duration', this.duration);
-        formData.append('photo', this.file);
+
+        if((this.file !== null)) {
+          formData.append('photo', this.file);
+          console.log('!==')
+        }
+        console.log('file '+this.file, 'fileName'+this.fileName)
 
         axios.post('/api/routes/'+id, formData)
           .then(response => {
             console.log(response.status);
             if(response.status == 200) {
+              this.getReadyRoutes()
               alert('Данные обновлены')
               this.showModalEditing = false
+              return
             }
             this.getReadyRoutes()
           })
@@ -308,10 +368,6 @@ export default {
               console.log(error);
               this.errored = true;
           })
-      },
-      search() {
-        console.log(this.searchText)
-        // this.data = 
       },
       showModalEditingFunc(id) {
         this.showModalEditing = true;
@@ -322,7 +378,8 @@ export default {
             this.description = response.data.data.description;
             this.city_id = response.data.data.city_id;
             this.duration = response.data.data.duration;
-            this.file = response.data.data.photo;
+            this.fileName = response.data.data.photo;
+            console.log(this.file)
           })
           .catch( error => {
               console.log(error);
@@ -338,70 +395,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.card {
-  padding: 0;
-  --mdb-card-spacer-y: 1.5rem;
-  --mdb-card-spacer-x: 1.5rem;
-  --mdb-card-title-spacer-y: 0.5rem;
-  --mdb-card-border-width: 1px;
-  --mdb-card-border-color: var(--mdb-border-color-translucent);
-  --mdb-card-border-radius: 0.5rem;
-  --mdb-card-box-shadow: 0 2px 15px -3px rgba(0,0,0,0.2),0 10px 20px -2px rgba(0,0,0,0.04);
-  --mdb-card-inner-border-radius: calc(0.5rem - 1px);
-  --mdb-card-cap-padding-y: 0.75rem;
-  --mdb-card-cap-padding-x: 1.5rem;
-  --mdb-card-cap-bg: hsla(0,0%,100%,0);
-  --mdb-card-bg: #fff;
-  --mdb-card-img-overlay-padding: 1.5rem;
-  --mdb-card-group-margin: 0.75rem;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  height: var(--mdb-card-height);
-  word-wrap: break-word;
-  background-color: var(--mdb-card-bg);
-  background-clip: border-box;
-  border: var(--mdb-card-border-width) solid var(--mdb-card-border-color);
-  border-radius: var(--mdb-card-border-radius);
-  box-shadow: var(--mdb-card-box-shadow);
-}
-.card-footer {
-  --mdb-card-footer-border-color: #f5f5f5;
-  --mdb-card-footer-border-width: 2px;
-  border-top: var(--mdb-card-footer-border-width) solid var(--mdb-card-footer-border-color);
-  background-color: white;
-}
-.outimg {
-  background-size: auto;
-  width: 250px;
-  height: 250px;
-}
-.innerimg {
-  object-fit: cover;
-  width: 100%;
-  height: 100%;
-  border-radius: 6px;
-}
-.searchInput {
-  background-color: white;
-  border: 1px solid #a04eff;
-  color: #ad8ecfb6;
-  border-right: 0;
-}
-.searchButton, .addButton {
-  border: 1px solid #a04eff !important;
-  color: #a04eff !important;
-  background-color: white;
-}
-.addButton {
-  box-shadow: rgba(147, 58, 199, 0.918) 0px 4.390625px 9px -4px, rgba(0, 0, 0, 0.01) 0px 0.390625px 2px 0px;
-}
-.searchButton:hover, .addButton:hover, .addButton:active {
-  color: white !important;
-  background-color: #a04eff !important;
-  border: 1px solid #a04eff !important;
-}
-</style>

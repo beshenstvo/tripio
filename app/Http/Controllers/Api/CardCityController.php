@@ -257,7 +257,7 @@ class CardCityController extends Controller
             
             return response()->json([
                 'message' => 'Created',
-                'data' => new CityCardResource($data)
+                'data' => new CityCardResource ($data)
             ], 200);
 
 

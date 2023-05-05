@@ -1,54 +1,80 @@
 <template>
-  <div class="home text-center py-4">
-    <!-- <p>{{ currentUser.email }}</p> -->
-    <!-- search -->
+  <div class="home text-center">
+    <!-- search
     <div class="img" id="img">
       <div class="input-group search pt-5 pb-5">
         <input type="search" class="form-control rounded" placeholder="Поиск города" aria-label="Search" aria-describedby="search-addon" />
         <button type="button" class="btn btn-outline-dark">поиск</button>
       </div>
       <div id="pentagon"></div>
+    </div> -->
+
+
+   <div class="main-container">
+    <div class="overlay">
+      <form>
+        <p class="slogan">Открой Россию с нами - путешествуй по-новому!</p>
+        <p class="pod-slogan">Насладись бескрайними просторами, захватывающими приключениями и впечатлениями, которые оставят твои сердце греться навсегда.</p>
+        <input type="text" class="search-container" placeholder="В какой город едем?">
+      </form>
     </div>
+  </div>
+
 
     <!-- Популярные города -->
     
     <div class="container mt-3 mb-3">
-      <h2 style="text-align: left;">Популярные города</h2>
+      <div class="text-center p-3"> 
+        <h2>Начните вашу поездку</h2>
+        <p>с самых посещаемых городов</p>
+      </div>
       <div class="row">
-        <div class="col-sm-6">
-          <div class="card cardstyle card1 pt-4 mt-2 pb-4">
+        <div class="col-sm-4">
+          <div class="card cardstyle card1 p-4">
             <div class="card-body">
               <h5 class="card-title card-title-style text-light fw-bold">Москва</h5>
               <p class="card-text card-text-style text-light">Окунись в атосмеформу бесконечной суеты.</p>
               <a href="#" class="btn btn-light btnstyle">Подробнее</a>
             </div>
           </div>
+          <div class="card-footer p-3">
+            <i class="fas fa-map-marker-alt me-2"></i><span>Название </span>
+          </div>
         </div>
-        <div class="col-sm-6">
-          <div class="card cardstyle card2 pt-4 mt-2 pb-4">
+        <div class="col-sm-4">
+          <div class="card cardstyle card2 p-4">
             <div class="card-body">
               <h5 class="card-title card-title-style text-light fw-bold">Казань</h5>
               <p class="card-text card-text-style text-light">With supporting text below as a natural lead-in to additional content.</p>
               <a href="#" class="btn btn-light btnstyle">Подробнее</a>
             </div>
           </div>
+          <div class="card-footer p-3">
+            <i class="fas fa-map-marker-alt me-2"></i><span>Название </span>
+          </div>
         </div>
-        <div class="col-sm-6">
-          <div class="card cardstyle card3 pt-4 mt-4 pb-4">
+        <div class="col-sm-4">
+          <div class="card cardstyle card3 p-4">
             <div class="card-body">
               <h5 class="card-title card-title-style text-light fw-bold">Самара</h5>
               <p class="card-text card-text-style text-light">With supporting text below as a natural lead-in to additional content.</p>
               <a href="#" class="btn btn-light btnstyle">Подробнее</a>
             </div>
           </div>
+          <div class="card-footer p-3">
+            <i class="fas fa-map-marker-alt me-2"></i><span>Название </span>
+          </div>
         </div>
-        <div class="col-sm-6">
-          <div class="card cardstyle card4 pt-4 mt-4 pb-4">
+        <div class="col-sm-4">
+          <div class="card cardstyle card4 p-4">
             <div class="card-body">
               <h5 class="card-title card-title-style text-light fw-bold">Санкт-Петербург</h5>
               <p class="card-text card-text-style text-light">With supporting text below as a natural lead-in to additional content.</p>
               <a href="#" class="btn btn-light btnstyle">Подробнее</a>
             </div>
+          </div>
+          <div class="card-footer p-3">
+            <i class="fas fa-map-marker-alt me-2"></i><span>Название </span>
           </div>
         </div>
 
@@ -59,7 +85,9 @@
     <!-- Популярные направления для любителей природы -->
     
      <div class="container mt-5 mb-5">
-      <h2 class="mt-4" style="text-align: left;">Популярные направления для любителей природы</h2>
+      <div class="text-center p-3"> 
+        <h2>Популярные направления для любителей природы</h2>
+      </div>
       <div class="row">
         <div class="col-sm-4">
           <div class="card mb-3">
@@ -116,10 +144,13 @@ export default {
     
   }, 
   mounted() {
-    window.axios.defaults.headers.common['Authorization'] = `Bearer ${this.token}`;
-    axios.get('api/user').then((response) => {
-      this.currentUser = response.data;
-    })
+   if(this.isLoggedIn) {
+      window.axios.defaults.headers.common['Authorization'] = `Bearer ${this.token}`;
+      axios.get('api/user').then((response) => {
+        this.currentUser = response.data;
+        console.log(this.currentUser);
+      })
+    }
   }
 };
 </script>
@@ -213,5 +244,85 @@ input {
 .btn-outline-dark:hover {
   background-color: #5599FF;
 }
+
+
+
+
+
+
+.pod-slogan {
+  color: rgb(255, 255, 255);
+  font-family: inherit;
+  width: 50%;
+  font-size: 1.2em;
+  margin-left: auto;
+  margin-right: auto;
+}
+.slogan {
+  color: rgb(196, 160, 201);
+  font-family: inherit;
+  font-size: 3.5em;
+}
+.main-container {
+  min-height: 94vh;
+  background-blend-mode: multiply;
+  background-image: url('http://127.0.0.1:8000/storage/fon2.jpg');
+  background-color: rgba(0, 0, 0, 0.2);
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  background-position: center;
+  background-repeat: no-repeat;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  top: 0;
+}
+
+.search-container {
+  position: relative;
+  width: 1000px;
+  max-width: 50%;
+  background-color: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgb(194, 147, 216);
+  border-radius: 10px !important;
+  padding: 0.7rem;
+  color: white !important;
+}
+
+::placeholder {
+  color: rgb(194, 147, 216);
+}
+
+.search-container::before {
+  content: '\f002'; /* код иконки поиска в Font Awesome */
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+  font-size: 16px;
+  color: #ffffff;
+  position: absolute;
+  top: 50%;
+  left: 8px;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+/* .input-group-text {
+  background-color: transparent;
+  border: none;
+}
+.input-group-text i {
+  color: #ccc;
+}
+.input-group-text::before {
+  content: "";
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-image: url("path/to/search-icon.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
+  margin-right: 10px;
+} */
 
 </style>

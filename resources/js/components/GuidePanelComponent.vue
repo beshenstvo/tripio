@@ -20,6 +20,11 @@
         </router-link>
       </li>
       <li class="nav-item p-2">
+        <router-link :to="{ name: 'Guide.verification' }" class="nav-link fas fa-check-circle">
+          Верификация
+        </router-link>
+      </li>
+      <li class="nav-item p-2">
         <router-link :to="{ name: 'Guide.profile' }" class="nav-link fas fa-star">
           Профиль
         </router-link>
@@ -30,6 +35,10 @@
           >Выйти</a>
       </li>
     </ul>
+
+    <div class="fixed-bottom p-3" style="width: 100%">
+       {{ currentUser.name }}
+    </div>
   </div>
 </template>
 
@@ -44,9 +53,13 @@ export default {
   }, 
   mounted() {
     window.axios.defaults.headers.common['Authorization'] = `Bearer ${this.token}`;
-    axios.get('api/user').then((response) => {
-    this.currentUser = response.data;
-    })
+    if(this.isLoggedIn) {
+      window.axios.defaults.headers.common['Authorization'] = `Bearer ${this.token}`;
+      axios.get('api/user').then((response) => {
+        this.currentUser = response.data;
+        console.log(this.currentUser);
+      })
+    }
   },
   methods: {
     logout() {
@@ -104,5 +117,14 @@ export default {
 
 .active {
   background-color: rgba(0, 255, 0, 0.9);
+}
+
+.fixed-bottom {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  z-index: 100;
 }
 </style>

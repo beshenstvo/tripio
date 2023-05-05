@@ -15,6 +15,11 @@
         </router-link>
       </li>
       <li class="nav-item p-2">
+        <router-link :to="{ name: 'Admin.citycard' }" class="nav-link fas fa-city">
+          Карточки городов
+        </router-link>
+      </li>
+      <li class="nav-item p-2">
         <router-link :to="{ name: 'Admin.forum' }" class="nav-link fas fa-comments">
           Форум
         </router-link>
@@ -54,11 +59,13 @@ export default {
   }, 
   mounted() {
     window.axios.defaults.headers.common['Authorization'] = `Bearer ${this.token}`;
-    axios.get('api/user').then((response) => {
-    this.currentUser = response.data;
-    }).catch((errors) => {
-    console.log(errors);
-    })
+    if(this.isLoggedIn) {
+      window.axios.defaults.headers.common['Authorization'] = `Bearer ${this.token}`;
+      axios.get('api/user').then((response) => {
+        this.currentUser = response.data;
+        console.log(this.currentUser);
+      })
+    }
   },
   methods: {
     logout() {

@@ -8,6 +8,9 @@ use App\Http\Resources\ServiceResource;
 use App\Models\Service;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * @OA\Schema(
@@ -246,7 +249,9 @@ class ServiceController extends Controller
      */
     public function index()
     {
-        return ServiceResource::collection(Service::all());
+        $id = auth()->id();
+
+        return ServiceResource::collection(Service::where('user_id', $id)->orderBy('id', 'desc')->paginate(5));
     }
 
     /**
@@ -257,9 +262,37 @@ class ServiceController extends Controller
      */
     public function store(ServiceRequest $request)
     {
-        $service = Service::create($request->validated());
+        try {
+            $image = Str::random(32).".".$request->photo->getClientOriginalExtension();
+            
+            #create 
+            $data = Service::create([
+                'city_id' => $request->city_id,
+                'user_id' => $request->user_id,
+                'name' => $request->name,
+                'description' => $request->description,
+                'duration' => $request->duration,
+                'price' => $request->price,
+                'type' => $request->type,
+                'kind' => $request->kind,
+                'photo' => $image,
+            ]);
 
-        return new ServiceResource($service);
+            #сохранение изображения
+            Storage::disk('public')->put($image, file_get_contents($request->photo));
+            
+            return response()->json([
+                'message' => 'Created',
+                'data' => new ServiceResource($data)
+            ], 200);
+
+
+        } catch (\Exception $e) {
+            return $e;
+            return response()->json([
+                'message' => 'Something went wrong'
+            ], 500);
+        }
     }
 
     /**
@@ -280,11 +313,56 @@ class ServiceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ServiceRequest $request, Service $service)
+    public function update(ServiceRequest $request, $id)
     {
-        $service->update($request->validated());
+        try {
+            if($request->photo) {
+                $image = Str::random(32).".".$request->photo->getClientOriginalExtension();
 
-        return new ServiceResource($service);
+                #update 
+                $service = Service::find($id);
+                $service->update([
+                    'city_id' => $request->city_id,
+                    'user_id' => $request->user_id,
+                    'name' => $request->name,
+                    'description' => $request->description,
+                    'duration' => $request->duration,
+                    'price' => $request->price,
+                    'type' => $request->type,
+                    'kind' => $request->kind,
+                    'photo' => $image,
+                ]);
+
+                #сохранение изображения
+                Storage::disk('public')->put($image, file_get_contents($request->photo));
+            } else {
+                #update 
+                $service = Service::find($id);
+                $service->update([
+                    'city_id' => $request->city_id,
+                    'user_id' => $request->user_id,
+                    'name' => $request->name,
+                    'description' => $request->description,
+                    'duration' => $request->duration,
+                    'price' => $request->price,
+                    'type' => $request->type,
+                    'kind' => $request->kind
+                ]);
+            }
+            
+
+            
+            return response()->json([
+                'message' => 'Updated',
+                'data' => $service
+            ], 200);
+
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Something went wrong'
+            ], 500);
+        }
     }
 
     /**
@@ -298,5 +376,16 @@ class ServiceController extends Controller
         $service->delete();
 
         return response(null, Response::HTTP_NO_CONTENT);
+    }
+
+    public function searchService(Request $request) {
+        $query = $request->input('query');
+
+        return Service::where('name', 'like', "%$query%")->paginate(5); 
+    }
+
+    public function indexAll()
+    {
+        return ServiceResource::collection(Service::orderBy('id', 'desc')->paginate(5));
     }
 }

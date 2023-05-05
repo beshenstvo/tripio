@@ -236,7 +236,7 @@ class ReadyRouteController extends Controller
      */
     public function index()
     {
-        return ReadyRouteResource::collection(Ready_route::with('cities')->orderBy('id', 'desc')->paginate(2));
+        return ReadyRouteResource::collection(Ready_route::with('cities')->orderBy('id', 'desc')->paginate(5));
     }
 
     /**
@@ -296,20 +296,31 @@ class ReadyRouteController extends Controller
     public function update(ReadyRoutesRequest $request, $id)
     {
         try {
-            $image = Str::random(32).".".$request->photo->getClientOriginalExtension();
+            if($request->photo) {
+                $image = Str::random(32).".".$request->photo->getClientOriginalExtension();
 
-            #update 
-            $route = Ready_route::find($id);
-            $route->update([
-                'city_id' => $request->city_id,
-                'name' => $request->name,
-                'description' => $request->description,
-                'duration' => $request->duration,
-                'photo' => $image,
-            ]);
+                #update 
+                $route = Ready_route::find($id);
+                $route->update([
+                    'city_id' => $request->city_id,
+                    'name' => $request->name,
+                    'description' => $request->description,
+                    'duration' => $request->duration,
+                    'photo' => $image,
+                ]);
 
-            #сохранение изображения
-            Storage::disk('public')->put($image, file_get_contents($request->photo));
+                #сохранение изображения
+                Storage::disk('public')->put($image, file_get_contents($request->photo));
+            } else {
+                #update 
+                $route = Ready_route::find($id);
+                $route->update([
+                    'city_id' => $request->city_id,
+                    'name' => $request->name,
+                    'description' => $request->description,
+                    'duration' => $request->duration
+                ]);
+            }
             
             return response()->json([
                 'message' => 'Updated',

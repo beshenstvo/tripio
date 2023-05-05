@@ -25,10 +25,10 @@ class RequestRequest extends FormRequest
     {
         return [
             'service_id' => 'required',
-            'client_id' => 'required',
             'client_phone' => 'required',
             'client_name' => 'required',
-            'message' => 'required'
+            'message' => 'required',
+            'archive' => 'nullable'
         ];
     }
 }
