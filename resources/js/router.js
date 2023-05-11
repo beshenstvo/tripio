@@ -45,6 +45,13 @@ const routes = [
     meta: { isAuth: false}
   },
   {
+    path: '/route/more-about-excursion/:id',
+    name: 'MoreAboutExcursion',
+    component: () => import('./views/AuthUser/MoreAboutExcursionComponent.vue'),
+    props: true,
+    meta: { isAuth: false}
+  },
+  {
     path: "/excursion",
     name: "Excursion",
     component: () => import('./views/AuthUser/ExcursionComponent.vue'),

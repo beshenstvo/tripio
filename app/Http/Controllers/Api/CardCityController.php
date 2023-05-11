@@ -230,7 +230,7 @@ class CardCityController extends Controller
      */
     public function index()
     {
-        return CityCardResource::collection(Card_city::all());
+        return CityCardResource::collection(Card_city::orderBy('id', 'desc')->paginate(5));
     }
 
     /**
@@ -289,19 +289,29 @@ class CardCityController extends Controller
     public function update(CityCardRequest $request, $id)
     {
         try {
-            $image = Str::random(32).".".$request->photo->getClientOriginalExtension();
+            if($request->photo) {
+                $image = Str::random(32).".".$request->photo->getClientOriginalExtension();
 
-            #update 
-            $card = Card_city::find($id);
-            $card->update([
-                'city_id' => $request->city_id,
-                'name' => $request->name,
-                'description' => $request->description,
-                'photo' => $image,
-            ]);
+                #update 
+                $card = Card_city::find($id);
+                $card->update([
+                    'city_id' => $request->city_id,
+                    'name' => $request->name,
+                    'description' => $request->description,
+                    'photo' => $image,
+                ]);
 
-            #сохранение изображения
-            Storage::disk('public')->put($image, file_get_contents($request->photo));
+                #сохранение изображения
+                Storage::disk('public')->put($image, file_get_contents($request->photo));
+            } else {
+                #update 
+                $card = Card_city::find($id);
+                $card->update([
+                    'city_id' => $request->city_id,
+                    'name' => $request->name,
+                    'description' => $request->description,
+                ]);
+            }
             
             return response()->json([
                 'message' => 'Updated',

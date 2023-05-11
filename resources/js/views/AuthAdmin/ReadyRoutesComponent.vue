@@ -164,7 +164,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" @click="showModalEditing = false, checkSelectedInput = false, fileName = ''">Закрыть</button>
-              <button type="button" class="btn btn-primary" :disabled="!isDisabled" @click="saveUpdates(this.id)">Сохранить</button>
+              <button type="button" class="btn btn-primary" :disabled="!isDisabledEdit" @click="saveUpdates(this.id)">Сохранить</button>
             </div>
           </div>
         </div>
@@ -194,6 +194,7 @@ export default {
       searchText: '',
       checkSelectedInput: false,
       pagination: '',
+      selectImg: false,
       fileName: '',
       originalRoute: {
         city_id: '',
@@ -210,6 +211,9 @@ export default {
   }, 
   computed: {
     isDisabled() {
+      return this.name !== '' && this.description !== '' && this.duration !== '' && this.file !== '' && this.city_id !== '' && this.selectImg;
+    },
+    isDisabledEdit() {
       return this.name !== '' && this.description !== '' && this.duration !== '' && this.file !== '' && this.city_id !== '';
     },
     filteredData() {
@@ -270,6 +274,7 @@ export default {
       handleFileChange(e) {
         this.file = e.target.files[0];
         this.checkSelectedInput = true;
+        this.selectImg = true;
       },
       add() {
         let formData = new FormData();
@@ -283,8 +288,9 @@ export default {
           .then(response => {
             console.log(response.status);
             if(response.status == 200) {
-              alert('Данные созданы')
               this.showModal = false
+              this.checkSelectedInput = false
+              alert('Данные созданы')
             }
             this.getReadyRoutes()
           })

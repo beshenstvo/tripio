@@ -29,7 +29,7 @@
         <p>с самых посещаемых городов</p>
       </div>
       <div class="row">
-        <div class="col-sm-4">
+        <div class="col-sm-6">
           <div class="card cardstyle card1 p-4">
             <div class="card-body">
               <h5 class="card-title card-title-style text-light fw-bold">Москва</h5>
@@ -37,11 +37,11 @@
               <a href="#" class="btn btn-light btnstyle">Подробнее</a>
             </div>
           </div>
-          <div class="card-footer p-3">
+          <!-- <div class="card-footer p-3">
             <i class="fas fa-map-marker-alt me-2"></i><span>Название </span>
-          </div>
+          </div> -->
         </div>
-        <div class="col-sm-4">
+        <div class="col-sm-6">
           <div class="card cardstyle card2 p-4">
             <div class="card-body">
               <h5 class="card-title card-title-style text-light fw-bold">Казань</h5>
@@ -49,11 +49,11 @@
               <a href="#" class="btn btn-light btnstyle">Подробнее</a>
             </div>
           </div>
-          <div class="card-footer p-3">
+          <!-- <div class="card-footer p-3">
             <i class="fas fa-map-marker-alt me-2"></i><span>Название </span>
-          </div>
+          </div> -->
         </div>
-        <div class="col-sm-4">
+        <div class="col-sm-6 mt-4">
           <div class="card cardstyle card3 p-4">
             <div class="card-body">
               <h5 class="card-title card-title-style text-light fw-bold">Самара</h5>
@@ -61,11 +61,11 @@
               <a href="#" class="btn btn-light btnstyle">Подробнее</a>
             </div>
           </div>
-          <div class="card-footer p-3">
+          <!-- <div class="card-footer p-3">
             <i class="fas fa-map-marker-alt me-2"></i><span>Название </span>
-          </div>
+          </div> -->
         </div>
-        <div class="col-sm-4">
+        <div class="col-sm-6 mt-4">
           <div class="card cardstyle card4 p-4">
             <div class="card-body">
               <h5 class="card-title card-title-style text-light fw-bold">Санкт-Петербург</h5>
@@ -73,9 +73,9 @@
               <a href="#" class="btn btn-light btnstyle">Подробнее</a>
             </div>
           </div>
-          <div class="card-footer p-3">
+          <!-- <div class="card-footer p-3">
             <i class="fas fa-map-marker-alt me-2"></i><span>Название </span>
-          </div>
+          </div> -->
         </div>
 
       </div>
@@ -85,8 +85,10 @@
     <!-- Популярные направления для любителей природы -->
     
      <div class="container mt-5 mb-5">
+      <h2 class="mt-4" style="text-align: left;"></h2>
       <div class="text-center p-3"> 
-        <h2>Популярные направления для любителей природы</h2>
+        <h2>Начните вашу поездку</h2>
+        <p>с самых посещаемых городов</p>
       </div>
       <div class="row">
         <div class="col-sm-4">

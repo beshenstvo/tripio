@@ -271,7 +271,10 @@ export default {
   }, 
   computed: {
     isDisabled() {
-      return this.name !== '' && this.description !== '' && this.duration !== '' && this.city_id !== '' && this.price !== '' && this.type !== '' && this.kind !== '' && this.checkSelectedImage;
+      return this.name !== '' && this.description !== '' && this.duration !== '' && this.city_id !== '' && this.price !== '' && this.type !== '' && this.kind !== '' && this.selectImg;
+    },
+    isDisabledEdit() {
+      return this.name !== '' && this.description !== '' && this.duration !== '' && this.city_id !== '' && this.price !== '' && this.type !== '' && this.kind !== '';
     },
     filteredData() {
       return this.$options.filters.searchFilter(this.data, this.searchText);
@@ -332,6 +335,7 @@ export default {
       handleFileChange(e) {
         this.file = e.target.files[0];
         this.checkSelectedInput = true;
+        this.selectImg = true;
         console.log(this.file);
       },
       add() {
@@ -351,8 +355,9 @@ export default {
             console.log(response);
             console.log(response.status);
             if(response.status == 200) {
-              alert('Данные созданы')
               this.showModal = false
+              this.checkSelectedInput = false
+              alert('Данные созданы')
             }
             this.getServices()
           })
@@ -409,8 +414,9 @@ export default {
             console.log(response.status);
             if(response.status == 200) {
               this.getServices()
-              alert('Данные обновлены')
+              this.checkSelectedInput = false;
               this.showModalEditing = false
+              alert('Данные обновлены');
               return
             }
             this.getServices()

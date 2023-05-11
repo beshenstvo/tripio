@@ -22,7 +22,7 @@ axios.interceptors.response.use(
     response => response,
     error => {
         console.log(error.response.status);
-      if (error.response && error.response.status === 419) {
+      if ((error.response && error.response.status === 401 && localStorage.getItem('role')) && (error.response && error.response.status === 419)) {
         logout();
         if(localStorage.getItem('role') === 'admin') {
             router.push('/admin/login');
@@ -59,7 +59,7 @@ router.beforeEach((to, from, next) => {
     } else {
       const allowedRoutes = {
         'guide': ['Guide.tours', 'Guide.service', 'Guide.request', 'Guide.profile', 'Guide.notice', 'Guide.home', 'Guide.verification', 'Guide.archive', 'Guide.active', 'Error'],
-        'user': ['Home', 'Route' ,'Excursion', 'Forum', 'Favorites', 'Notice', 'Profile', 'MoreAboutRoute', 'Error'],
+        'user': ['Home', 'Route', 'Hotel' ,'Excursion', 'Forum', 'Favorites', 'Notice', 'Profile', 'MoreAboutRoute', 'MoreAboutExcursion', 'Error'],
         'admin': ['Admin.allaccounts', 'Admin.home', 'Admin.excursion', 'Admin.readyroute', 'Admin.forum', 'Admin.reviews',
         'Admin.notice', 'Admin.citycard', 'Error']
       };

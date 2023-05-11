@@ -317,6 +317,9 @@ class ServiceController extends Controller
     {
         try {
             if($request->photo) {
+                // $image = Image::make($file)->widen(1000, function ($constraint) {
+                //     $constraint->upsize();
+                // });
                 $image = Str::random(32).".".$request->photo->getClientOriginalExtension();
 
                 #update 

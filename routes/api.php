@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\RoomController;
 use App\Http\Controllers\Api\ServiceController;
 use App\Http\Controllers\Api\ShowPlaceController;
 use App\Http\Controllers\Api\ThemeController;
+use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Auth\AdminAuthenticationController;
 use App\Http\Controllers\Auth\GuideAuthenticationController;
 use App\Http\Controllers\Auth\UserAuthenticationController as AuthUserAuthenticationController;
@@ -61,13 +62,15 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         'reservings' => ReservingController::class,
         'reviews' => ReviewController::class,
         'rooms' => RoomController::class,
-        'showplaces' => ShowPlaceController::class
+        'showplaces' => ShowPlaceController::class,
+        'users' => UserController::class
     ]);
     Route::get('/searchService', 'App\Http\Controllers\Api\ServiceController@searchService');
 });
 
 # роуты для гостя
 Route::get('servicesAll', 'App\Http\Controllers\Api\ServiceController@indexAll');
+Route::get('services/{service}', 'App\Http\Controllers\Api\ServiceController@show');
 Route::get('routes', 'App\Http\Controllers\Api\ReadyRouteController@index');
 Route::get('routes/{route}', 'App\Http\Controllers\Api\ReadyRouteController@show');
 Route::apiResource('cities', CityController::class);

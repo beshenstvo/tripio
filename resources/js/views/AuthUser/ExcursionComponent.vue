@@ -36,7 +36,7 @@
             </div>
           </div>
           <div class="card-footer d-flex justify-content-between">
-            <a class="btn btn-outline-primary"><i class="fas fa-info-circle"></i><span class="ms-1">Подробнее</span></a>
+            <router-link class="btn btn-outline-primary"  :to="{ name: 'MoreAboutExcursion', params: { id: service.id } }"><i class="fas fa-info-circle"></i><span class="ms-1">Подробнее</span></router-link>
             <a class="btn btn-outline-success mr-2" @click="showModal = true, service_id = service.id"><i class="fas fa-file-alt"></i><span class="ms-1">Оставить заявку</span></a>
           </div>
         </div>

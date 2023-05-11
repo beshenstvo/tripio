@@ -1,8 +1,16 @@
 <template>
   <div>
      <div class="row">
-      <div class="col-md-8 offset-md-2">
-        <h1 class="pt-3">{{ data.name }}</h1>
+      <div class="col-md-8 offset-md-2" style="background-color: white;
+box-shadow: 1px 1px 10px 1px;">
+        <div class="d-flex justify-content-evenly">
+            <div style="align-self: center;">
+                <router-link class="btn btn-outline-primary"  :to="{ name: 'Route'}"><i class="fa fa-arrow-left"></i></router-link>
+            </div>
+            <div>
+                <h1 class="pt-3">{{ data.name }}</h1>
+            </div>
+        </div>
         <div class="mt-3 text-center">
           <img v-if="data" :src="'/api/image/public/'+data.photo" :alt="data.name" class="img-fluid rounded">
         </div>

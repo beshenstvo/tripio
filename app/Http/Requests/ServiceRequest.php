@@ -32,7 +32,7 @@ class ServiceRequest extends FormRequest
             'price' => 'required',
             'type' => 'required',
             'kind' => 'required',
-            'photo' => 'nullable|image|mimes:jpg,jpeg,png,gif,svg',
+            'photo' => 'nullable|image|mimes:jpg,jpeg,png,gif,svg|max:10072',
         ];
     }
 }

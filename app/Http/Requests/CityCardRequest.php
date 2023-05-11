@@ -27,7 +27,7 @@ class CityCardRequest extends FormRequest
             'city_id' => 'required',
             'name' => 'required',
             'description' => 'required',
-            'photo' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048'
+            'photo' => 'nullable|image|mimes:jpg,png,jpeg,gif,svg|max:2048'
         ];
     }
 }
