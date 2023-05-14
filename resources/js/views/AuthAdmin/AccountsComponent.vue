@@ -3,7 +3,7 @@
     <div class="row d-flex justify-content-between mt-3 mb-4">
       <div class="col-md-2" style="margin-top: auto; margin-bottom: auto; text-align: end;">
         <select name="" id="" class="form-select searchInput" v-model="sortValue">
-          <option value="default" selected disabled>--- Роль ---</option>
+          <option value="default" disabled selected>--- Роль ---</option>
           <option value="all">Все</option>
           <option value="admin">admin</option>
           <option value="user">user</option>
@@ -13,7 +13,7 @@
 
       <div class="col-md-9" style="margin-top: auto; margin-bottom: auto;">
         <div class="input-group">
-          <input type="text" class="form-control searchInput" placeholder="Введите имя" aria-describedby="button-addon2">
+          <input type="text" class="form-control searchInput" placeholder="Введите имя" aria-describedby="button-addon2"  v-model="searchText">
           <button class="btn searchButton" type="button" id="button-addon2"><i class="fas fa-search"></i></button>
         </div>
       </div>
@@ -63,7 +63,8 @@
               <form>
                 <div class="mb-3">
                   <label for="route-name">Имя</label>
-                  <input type="text" class="form-control" id="route-name" placeholder="Введите название маршрута" v-model="name">
+                  <input type="text" class="form-control" id="route-name" placeholder="Введите имя пользователя" v-model="name" :class="{'is-invalid': v$.name.$error}">
+                  <span class="invalid-feedback" v-if="v$.name.$error">Поле обязательно для заполнения</span>
                 </div>
                 <div class="mb-3">
                   <label for="route-city">Выберите роль пользователя</label>
@@ -75,21 +76,24 @@
                 </div>
                 <div class="mb-3">
                   <label for="route-description">Email</label>
-                  <input class="form-control" type="text" id="route-description" placeholder="Введите описание маршрута" v-model="email">
+                  <input class="form-control" type="text" id="route-description" placeholder="Введите email пользователя" v-model="email" :class="{'is-invalid': v$.email.$error}">
+                  <span class="invalid-feedback" v-if="v$.email.$error">Введите правильный email</span>
                 </div>
                 <div class="mb-3">
                   <label for="route-duration">Пароль</label>
-                  <input type="password" class="form-control" id="route-duration" placeholder="Введите длительность маршрута" v-model="password">
+                  <input type="password" class="form-control" id="route-duration" placeholder="Введите пароль" v-model="password" :class="{'is-invalid': v$.password.$error}">
+                  <span class="invalid-feedback" v-if="v$.password.$error">Пароль должен быть не короче 6 символов</span>
                 </div>
-                 <div class="mb-3">
+                <div class="mb-3">
                   <label for="route-duration">Подтверждение пароля</label>
-                  <input type="password" class="form-control" id="route-duration" placeholder="Введите длительность маршрута" v-model="confirm_password">
+                  <input type="password" class="form-control" id="route-duration" placeholder="Подтвердите пароль" v-model="confirm_password" :class="{'is-invalid': v$.confirm_password.$error}">
+                  <span class="invalid-feedback" v-if="v$.confirm_password.$error">Пароли не совпадают</span>
                 </div>
               </form>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" @click="showModal = false">Закрыть</button>
-              <button type="button" class="btn btn-primary" :disabled="!isDisabled" @click="add">Добавить</button>
+              <button type="button" class="btn btn-primary" @click="add">Добавить</button>
             </div>
           </div>
         </div>
@@ -109,7 +113,8 @@
               <form>
                 <div class="mb-3">
                   <label for="route-name">Имя</label>
-                  <input type="text" class="form-control" id="route-name" placeholder="Введите название маршрута" v-model="name">
+                  <input type="text" class="form-control" id="route-name" placeholder="Введите название маршрута" v-model="name" :class="{'is-invalid': v$.name.$error}">
+                  <span class="invalid-feedback" v-if="v$.name.$error">Поле обязательно для заполнения</span>
                 </div>
                 <div class="mb-3">
                   <label for="route-city">Выберите роль пользователя</label>
@@ -121,7 +126,8 @@
                 </div>
                 <div class="mb-3">
                   <label for="route-description">Email</label>
-                  <input class="form-control" type="text" id="route-description" placeholder="Введите описание маршрута" v-model="email">
+                  <input class="form-control" type="text" id="route-description" placeholder="Введите описание маршрута" v-model="email" :class="{'is-invalid': v$.email.$error}">
+                  <span class="invalid-feedback" v-if="v$.email.$error">Введите правильный email</span>
                 </div>
                  <div class="d-flex justify-content-start mb-3">
                     <div>
@@ -137,16 +143,18 @@
                 <div class="mb-3" v-if="showPasswordInput">
                   <label for="route-duration">Пароль</label>
                   <input type="password" class="form-control" id="route-duration" placeholder="Пароль" v-model="password">
+                  <span class="invalid-feedback">Пароль должен быть не короче 6 символов</span>
                 </div>
                  <div class="mb-3" v-if="showPasswordInput">
                   <label for="route-duration">Подтверждение пароля</label>
                   <input type="password" class="form-control" id="route-duration" placeholder="Подтверждение пароля" v-model="confirm_password">
+                  <span class="invalid-feedback">Пароли не совпадают</span>
                 </div>
               </form>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" @click="showModalEditing = false, email = '', name = '', id = ''">Закрыть</button>
-              <button type="button" class="btn btn-primary" :disabled="!isDisabledEdit" @click="saveUpdates(this.id)">Сохранить</button>
+              <button type="button" class="btn btn-primary" @click="saveUpdates(this.id), showPasswordInput = false">Сохранить</button>
             </div>
           </div>
         </div>
@@ -191,7 +199,7 @@
                 </div>
                  <div class="mb-3">
                   <label for="route-description">Дата окончания блокировки</label>
-                  <input class="form-control" :min="tomorrow.toISOString().slice(0, 10)" type="date" id="route-description" v-model="dateEnd">
+                  <input class="form-control" :min="tomorrow.toISOString().slice(0, 10)" type="date" id="route-description" v-model="dateEnd" :value="tomorrow.toISOString().slice(0, 10)">
                 </div>
               </form>
             </div>
@@ -208,8 +216,14 @@
 </template>
 
 <script>
+import { useVuelidate } from '@vuelidate/core'
+import { required, email, minLength, sameAs } from '@vuelidate/validators'
+
 import axios from 'axios';
 export default {
+  setup () {
+    return { v$: useVuelidate() }
+  },
   data() {
     return {
       data: '',
@@ -228,7 +242,7 @@ export default {
       dateEnd: '',
       id: '',
       blockUserName: '',
-      sortValue: '',
+      sortValue: 'default',
       originalUser: {
         name: '',
         email: '',
@@ -236,6 +250,24 @@ export default {
       },
       currentRole: localStorage.getItem('role'),
       tomorrow: new Date(),
+    }
+  },
+  validations() {
+    return {
+       name: {
+      required,
+    },
+    email: {
+      required,
+      email,
+    },
+    password: {
+      required,
+      minLength: minLength(6)
+    },
+    confirm_password: {
+      sameAsPassword: sameAs(this.password),
+    },
     }
   },
   mounted() {
@@ -272,14 +304,14 @@ export default {
         );
       });
     },
-  sortFilter(data, sortValue) {
-    if (!sortValue || sortValue == 'all') return data;
-    return data.filter(function(item) {
-      return item.role === sortValue;
-    }).sort(function(a, b) {
-      return a.name.localeCompare(b.name);
-    });
-  }
+    sortFilter(data, sortValue) {
+      if (!sortValue || sortValue == 'all' || sortValue == 'default') return data;
+      return data.filter(function(item) {
+        return item.role === sortValue;
+      }).sort(function(a, b) {
+        return a.name.localeCompare(b.name);
+      });
+    }
   },
   methods: {
     getData(page = 1) {
@@ -301,27 +333,33 @@ export default {
       return text.replace(regex, '<mark style="padding: 0.2em 0 0.2em 0">$1</mark>');
     },
     add() {
-      let formData = new FormData();
-      formData.append('name', this.name);
-      formData.append('email', this.email);
-      formData.append('password', this.password);
-      formData.append('role', this.role);
+      this.v$.$touch();
+      if(this.v$.$anyError) {
+        return;
+      }
+      if (!this.v$.$invalid) {
+        let formData = new FormData();
+        formData.append('name', this.name);
+        formData.append('email', this.email);
+        formData.append('password', this.password);
+        formData.append('role', this.role);
 
-      console.log(this.role, this.name, this.email, this.password)
+        console.log(this.role, this.name, this.email, this.password)
 
-      axios.post('/api/users/', formData)
-      .then(response => {
-        console.log(response.data);
-        if(response.status == 200) {
-          this.showModal = false
-          alert('Данные созданы')
-        }
-        this.getData()
-      })
-      .catch( error => {
-          console.log(error);
-          this.errored = true;
-      })
+        axios.post('/api/users/', formData)
+        .then(response => {
+          console.log(response.data);
+          if(response.status == 200) {
+            this.showModal = false
+            alert('Данные созданы')
+          }
+          this.getData()
+        })
+        .catch( error => {
+            console.log(error);
+            this.errored = true;
+        })
+      }
     },
     showModalEditingFunc(id) {
       this.showModalEditing = true;
@@ -340,46 +378,52 @@ export default {
       })
     },
     async saveUpdates(id) {
-      await axios.get('api/users/'+id).then(response => {
-        this.originalUser.name = response.data.data.name
-        this.originalUser.email = response.data.data.email
-        this.originalUser.role = response.data.data.role
-      })
-      
-      if (
-        this.name == this.originalUser.name &&
-        this.email == this.originalUser.email &&
-        this.role == this.originalUser.role &&
-        !this.showPasswordInput
-      ) {
-        this.showModalEditing = false;
+      this.v$.$touch();
+      if(this.v$.$anyError) {
         return;
       }
-
-      let formData = new FormData();
-      formData.append('_method', 'PUT');
-      formData.append('name', this.name);
-      formData.append('email', this.email);
-      formData.append('role', this.role);
-
-      if(this.showPasswordInput) {
-        formData.append('password', this.password);
-        formData.append('password_confirmation', this.confirm_password);
-      }
-
-      axios.post('/api/users/'+id, formData)
-      .then(response => {
-        console.log(response.data);
-        if(response.status == 200) {
-          this.getData()
-          this.showModalEditing = false
-          alert('Данные обновлены')
+      if (!this.v$.name.$error && !this.v$.email.$error) {
+        await axios.get('api/users/'+id).then(response => {
+          this.originalUser.name = response.data.data.name
+          this.originalUser.email = response.data.data.email
+          this.originalUser.role = response.data.data.role
+        })
+        
+        if (
+          this.name == this.originalUser.name &&
+          this.email == this.originalUser.email &&
+          this.role == this.originalUser.role &&
+          !this.showPasswordInput
+        ) {
+          this.showModalEditing = false;
+          return;
         }
-      })
-      .catch( error => {
-          console.log(error);
-          this.errored = true;
-      })
+
+        let formData = new FormData();
+        formData.append('_method', 'PUT');
+        formData.append('name', this.name);
+        formData.append('email', this.email);
+        formData.append('role', this.role);
+
+        if(this.showPasswordInput) {
+          formData.append('password', this.password);
+          formData.append('password_confirmation', this.confirm_password);
+        }
+
+        axios.post('/api/users/'+id, formData)
+        .then(response => {
+          console.log(response.data);
+          if(response.status == 200) {
+            this.getData()
+            this.showModalEditing = false
+            alert('Данные обновлены')
+          }
+        })
+        .catch( error => {
+            console.log(error);
+            this.errored = true;
+        })
+        }
     },
     blockUser(id, name) {
       this.id = id;
