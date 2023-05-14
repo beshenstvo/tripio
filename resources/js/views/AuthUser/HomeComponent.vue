@@ -242,15 +242,9 @@ input {
   transition: all 0.4s ease-out;
 }
 
-
 .btn-outline-dark:hover {
   background-color: #5599FF;
 }
-
-
-
-
-
 
 .pod-slogan {
   color: rgb(255, 255, 255);
@@ -308,23 +302,4 @@ input {
   transform: translateY(-50%);
   z-index: 1;
 }
-
-/* .input-group-text {
-  background-color: transparent;
-  border: none;
-}
-.input-group-text i {
-  color: #ccc;
-}
-.input-group-text::before {
-  content: "";
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  background-image: url("path/to/search-icon.svg");
-  background-repeat: no-repeat;
-  background-size: contain;
-  margin-right: 10px;
-} */
-
 </style>

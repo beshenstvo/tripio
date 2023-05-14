@@ -19,6 +19,9 @@ class UserResource extends JsonResource
             'role' => $this->role,
             'name' => $this->name,
             'email' => $this->email,
+            'is_blocked' => $this->is_blocked,
+            'blocked_at' => $this->blocked_at,
+            'blocked_until' => $this->blocked_until
         ];
     }
 }

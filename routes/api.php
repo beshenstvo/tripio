@@ -66,6 +66,9 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         'users' => UserController::class
     ]);
     Route::get('/searchService', 'App\Http\Controllers\Api\ServiceController@searchService');
+    Route::post('/users/{id}/block/{end_date}/{role}', 'App\Http\Controllers\Api\UserController@blockUser');
+    Route::post('/users/{id}/unlock/{role}', 'App\Http\Controllers\Api\UserController@unlockUser');
+
 });
 
 # роуты для гостя

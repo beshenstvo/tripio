@@ -10837,10 +10837,6 @@ body {
   background-color: white !important;
 }
 
-body {
-  background-color: #f3f1ff;
-}
-
 .card {
   padding: 0;
   --mdb-card-spacer-y: 1.5rem;
@@ -10894,8 +10890,7 @@ body {
 .searchInput {
   background-color: white;
   border: 1px solid #a04eff;
-  color: rgba(173, 142, 207, 0.7137254902);
-  border-right: 0;
+  color: rgba(105, 47, 167, 0.7137254902);
 }
 
 .searchButton, .addButton {

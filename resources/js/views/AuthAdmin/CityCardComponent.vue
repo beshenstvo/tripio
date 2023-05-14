@@ -367,3 +367,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+::placeholder {
+  color: rgb(194, 147, 216);
+}
+</style>

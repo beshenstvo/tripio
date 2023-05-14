@@ -1,12 +1,11 @@
 <template>
-  <div>
+  <div class="container">
      <div class="row">
-      <div class="col-md-8 offset-md-2" style="background-color: white;
-box-shadow: 1px 1px 10px 1px;">
+        <div style="align-self: center;" class="p-2">
+          <router-link class="list-group-item-action link"  :to="{ name: 'Excursion'}">Экскурсии </router-link><span>/ карточка экскурсии</span>
+        </div>
+      <div class="col-md-8 offset-md-2 mb-2" style="background-color: white; box-shadow: 1px 1px 8px 1px rgba(0, 0, 0, .2); border-radius: 10px;">
         <div class="d-flex justify-content-evenly">
-            <div style="align-self: center;">
-                <router-link class="btn btn-outline-primary"  :to="{ name: 'Excursion'}"><i class="fa fa-arrow-left"></i></router-link>
-            </div>
             <div>
                 <h1 class="pt-3">{{ data.name }}</h1>
             </div>

@@ -300,32 +300,6 @@ export default {
           })
       },
       async saveUpdates(id) {
-        // let formData = new FormData();
-        // formData.append('_method', 'PUT');
-        // formData.append('city_id', this.city_id);
-        // formData.append('name', this.name);
-        // formData.append('description', this.description);
-        // formData.append('duration', this.duration);
-        // formData.append('photo', this.file);
-
-        // axios.post('/api/routes/'+id, formData)
-        //   .then(response => {
-        //     console.log(response.status);
-        //     if(response.status == 200) {
-        //       this.getReadyRoutes()
-        //       alert('Данные обновлены')
-        //       this.showModalEditing = false
-        //       return
-        //     }
-        //     this.getReadyRoutes()
-        //   })
-        //   .catch( error => {
-        //       console.log(error);
-        //       this.errored = true;
-        //   })
-          
-
-
         await axios.get('api/routes/'+id).then(response => {
           this.originalRoute.city_id = response.data.data.city_id
           this.originalRoute.name = response.data.data.name
@@ -401,3 +375,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+::placeholder {
+  color: rgb(194, 147, 216);
+}
+</style>
