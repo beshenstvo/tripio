@@ -3,7 +3,7 @@
     <div class="row d-flex justify-content-between mt-3 mb-4">
       <div class="col-md-12" style="margin-top: auto; margin-bottom: auto;">
         <div class="input-group">
-          <input type="text" class="form-control searchInput" placeholder="Введите название или описание услуги" aria-describedby="button-addon2" v-model="searchText">
+          <input type="text" class="form-control searchInput" placeholder="Введите название или описание услуги" aria-describedby="button-addon2" v-model.trim="searchText">
           <button class="btn searchButton" type="button" id="button-addon2"><i class="fas fa-search"></i></button>
         </div>
       </div>
@@ -92,22 +92,24 @@
                   <select class="form-control" id="route-city" v-model.trim="v$.city_id.$model">
                     <option v-for="city in cities" :key="city.id" :value="city.id">{{ city.name }}</option>
                   </select>
-                  <div v-if="v$.city_id.$error" class="text-danger">{{ v$.city_id.$error }}</div>
                 </div>
                 <div class="mb-3">
                   <label for="route-name">Название маршрута</label>
                   <input type="text" class="form-control" id="route-name" placeholder="Введите название маршрута" v-model.trim="v$.name.$model" :class="{'is-invalid': v$.name.$error}">
-                  <span class="invalid-feedback" v-if="v$.name.$error">Поле обязательно для заполнения</span>
+                  <span class="invalid-feedback" v-if="v$.name.required.$invalid">Поле обязательно для заполнения</span>
+                  <span class="invalid-feedback" v-if="v$.name.minLength.$invalid">Поле должно содержать количесвто символов больше 15</span>
                 </div>
                 <div class="mb-3">
                   <label for="route-description">Описание маршрута</label>
                   <textarea class="form-control" id="route-description" rows="3" placeholder="Введите описание маршрута" v-model.trim="v$.description.$model" :class="{'is-invalid': v$.description.$error}"></textarea>
-                  <span class="invalid-feedback" v-if="v$.description.$error">Поле обязательно для заполнения</span>
+                  <span class="invalid-feedback" v-if="v$.description.required.$invalid">Поле обязательно для заполнения</span>
+                  <span class="invalid-feedback" v-if="v$.description.minLength.$invalid">Поле должно содержать количесвто символов больше 30</span>
                 </div>
                 <div class="mb-3">
                   <label for="route-duration">Длительность мероприятия</label>
                   <input type="text" class="form-control" id="route-duration" placeholder="Введите длительность мероприятия" v-model.trim="v$.duration.$model" :class="{'is-invalid': v$.duration.$error}">
-                  <span class="invalid-feedback" v-if="v$.duration.$error">Поле обязательно для заполнения</span>
+                  <span class="invalid-feedback" v-if="v$.duration.required.$invalid">Поле обязательно для заполнения</span>
+                  <span class="invalid-feedback" v-if="v$.duration.minLength.$invalid">Поле должно содержать количесвто символов больше 4</span>
                 </div>
 
                 <div class="mb-3">
@@ -203,7 +205,7 @@ export default {
       fileName: ''
     }
   },
-   validations: {
+  validations: {
     city_id: { required },
     name: { required, minLength: minLength(15) },
     description: { required, minLength: minLength(30) },
@@ -214,10 +216,7 @@ export default {
       positive(value) {
         return value > 0;
       }
-    },
-    // type: { required },
-    // kind: { required },
-    // fileName: { required }
+    }
   },
   mounted() {
     this.getServices();

@@ -3,13 +3,13 @@
     <div class="row d-flex justify-content-between mt-3 mb-4">
       <div class="col-md-11" style="margin-top: auto; margin-bottom: auto;">
         <div class="input-group">
-          <input type="text" class="form-control searchInput" placeholder="Введите название города" aria-describedby="button-addon2" v-model="searchText">
+          <input type="text" class="form-control searchInput" placeholder="Введите название города" aria-describedby="button-addon2" v-model.trim="searchText">
           <button class="btn searchButton" type="button" id="button-addon2"><i class="fas fa-search"></i></button>
         </div>
       </div>
 
        <div class="col-md-1" style="margin-top: auto; margin-bottom: auto; text-align: end;">
-        <button class="btn btn-outline-primary addButton" @click="showModal = true, city_id = '1', name = '', description = '', duration = ''"><i class="fas fa-plus"></i></button>
+        <button class="btn btn-outline-primary addButton" @click="showModal = true, name = '', description = '', duration = ''"><i class="fas fa-plus"></i></button>
       </div>
     </div>
 
@@ -85,26 +85,34 @@
             </div>
             <div class="modal-body">
               <!-- Форма для добавления маршрута -->
-              <form>
+              <form v-if="cities.length > 0">
                 <div class="mb-3">
                   <label for="route-city">Выберите город</label>
-                  <select class="form-select" id="route-city" v-model="city_id">
+                  <select class="form-control" id="route-city" v-model="city_id" :class="{'is-invalid': city_id == ''}">
                     <option v-for="city in cities" :key="city.id" :value="city.id">{{ city.name }}</option>
                   </select>
+                  <span class="invalid-feedback" v-if="city_id == ''">Поле обязательно для заполнения</span>
                 </div>
                 <div class="mb-3">
                   <label for="route-name">Название карточки</label>
-                  <input type="text" class="form-control" id="route-name" placeholder="Введите название маршрута" v-model="name">
+                  <input type="text" class="form-control" id="route-name" placeholder="Введите название маршрута" v-model.trim="v$.name.$model" :class="{'is-invalid': v$.name.$error}">
+                  <span class="invalid-feedback" v-if="v$.name.required.$invalid">Поле обязательно для заполнения</span>
+                  <span class="invalid-feedback" v-if="v$.name.minLength.$invalid">Поле должно содержать количесвто символов больше 15</span>
                 </div>
                 <div class="mb-3">
                   <label for="route-description">Описание карточки</label>
-                  <textarea class="form-control" id="route-description" rows="3" placeholder="Введите описание маршрута" v-model="description"></textarea>
+                  <textarea class="form-control" id="route-description" rows="3" placeholder="Введите описание маршрута" v-model.trim="v$.description.$model" :class="{'is-invalid': v$.description.$error}"></textarea>
+                  <span class="invalid-feedback" v-if="v$.description.required.$invalid">Поле обязательно для заполнения</span>
+                  <span class="invalid-feedback" v-if="v$.description.minLength.$invalid">Поле должно содержать количесвто символов больше 30</span>
                 </div>
                 <div class="mb-3">
                   <label for="formFile" class="form-label">Изображение</label>
                   <input class="form-control" type="file" id="formFile" @change="handleFileChange">
                 </div>
               </form>
+              <div v-if="cities.length == 0">
+                У всех городов есть карточки.
+              </div>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" @click="showModal = false">Закрыть</button>
@@ -129,17 +137,21 @@
               <form>
                 <div class="mb-3">
                   <label for="route-city">Выберите город</label>
-                  <select class="form-control" id="route-city" v-model="city_id">
+                  <select class="form-control" id="route-city" v-model.trim="city_id">
                     <option v-for="city in citiesForEditing" :key="city.id" :value="city.id">{{ city.name }}</option>
                   </select>
                 </div>
                 <div class="mb-3">
                   <label for="route-name">Название карточки</label>
-                  <input type="text" class="form-control" id="route-name" placeholder="Введите название маршрута" v-model="name">
+                  <input type="text" class="form-control" id="route-name" placeholder="Введите название маршрута"  v-model.trim="v$.name.$model" :class="{'is-invalid': v$.name.$error}">
+                  <span class="invalid-feedback" v-if="v$.name.required.$invalid">Поле обязательно для заполнения</span>
+                  <span class="invalid-feedback" v-if="v$.name.minLength.$invalid">Поле должно содержать количесвто символов больше 15</span>
                 </div>
                 <div class="mb-3">
                   <label for="route-description">Описание карточки </label>
-                  <textarea class="form-control" id="route-description" rows="3" placeholder="Введите описание маршрута" v-model="description"></textarea>
+                  <textarea class="form-control" id="route-description" rows="3" placeholder="Введите описание маршрута" v-model.trim="v$.description.$model" :class="{'is-invalid': v$.description.$error}"></textarea>
+                  <span class="invalid-feedback" v-if="v$.description.required.$invalid">Поле обязательно для заполнения</span>
+                  <span class="invalid-feedback" v-if="v$.description.minLength.$invalid">Поле должно содержать количесвто символов больше 30</span>
                 </div>
                 <div class="mb-3">
                   <label for="formFile" class="form-label">Текущее изображение</label>
@@ -165,8 +177,13 @@
 
 <script scoped>
 import axios from 'axios';
+import { useVuelidate } from '@vuelidate/core'
+import { required, minLength, integer } from '@vuelidate/validators'
 
 export default {
+  setup () {
+    return { v$: useVuelidate() }
+  },
   data() {
     return {
       loading: true,
@@ -176,7 +193,7 @@ export default {
       showModal: false, 
       showModalEditing: false,
       id: '',
-      city_id: 1,
+      city_id: '',
       name: '',
       description: '',
       file: null,
@@ -197,6 +214,10 @@ export default {
       fileName: ''
     }
   },
+   validations: {
+    name: { required, minLength: minLength(15) },
+    description: { required, minLength: minLength(30) }
+  },
   mounted() {
     this.getData()
     .then(() => this.getCities())
@@ -204,7 +225,7 @@ export default {
   }, 
   computed: {
     isDisabled() {
-      return this.name !== '' && this.description !== '' && this.city_id !== '' && this.selectImg;
+      return this.name !== '' && this.description !== '' && this.city_id !== '' && this.file != null;
     },
     isDisabledEdit() {
       return this.name !== '' && this.description !== '' && this.city_id !== '';
@@ -248,6 +269,8 @@ export default {
         this.citiesForEditing = response.data.data;
         const usedCityIds = this.data.map(city => city.city_id); // получаем массив id городов, которые уже есть в this.data
         this.cities = allCities.filter(city => !usedCityIds.includes(city.id)); // фильтруем массив городов и оставляем только те, которых еще нет в this.data
+        this.city_id = this.cities.length > 0 ? this.cities[0].id : null
+        console.log('get city id '+ this.city_id)
       } catch (error) {
         console.error(error);
       }
@@ -272,7 +295,12 @@ export default {
         console.log(this.file);
       },
       async saveUpdates(id) {
-        await axios.get('api/citycards/'+id).then(response => {
+        this.v$.$touch();
+        if(this.v$.$anyError) {
+          return;
+        }
+        if (!this.v$.$invalid) { 
+          await axios.get('api/citycards/'+id).then(response => {
           console.log(response.data)
           this.originalService.city_id = response.data.city_id
           this.originalService.name = response.data.name
@@ -317,6 +345,7 @@ export default {
               console.log(error);
               this.errored = true;
           })
+        }
       },
       showModalEditingFunc(id) {
         this.showModalEditing = true;
@@ -336,28 +365,33 @@ export default {
 
       }, 
       add() {
-        let formData = new FormData();
-        formData.append('city_id', this.city_id);
-        formData.append('name', this.name);
-        formData.append('description', this.description);
-        formData.append('photo', this.file);
+        this.v$.$touch();
+        if(this.v$.$anyError) {
+          return;
+        }
+        if (!this.v$.$invalid) {
+          let formData = new FormData();
+          formData.append('city_id', this.city_id);
+          formData.append('name', this.name);
+          formData.append('description', this.description);
+          formData.append('photo', this.file);
 
-        axios.post('/api/citycards/', formData)
-          .then(response => {
-            console.log(response.data);
-            if(response.status == 200) {
-              this.showModal = false
-              this.checkSelectedInput = false
-              alert('Данные созданы')
-            }
-            this.getData()
-            this.getCities()
-            // this.showModalEditingFunc(response.data.data.id)
-          })
-          .catch( error => {
-              console.log(error);
-              this.errored = true;
-          })
+          axios.post('/api/citycards/', formData)
+            .then(response => {
+              console.log(response.data);
+              if(response.status == 200) {
+                this.showModal = false
+                this.checkSelectedInput = false
+                alert('Данные созданы')
+              }
+              this.getData()
+              this.getCities()
+            })
+            .catch( error => {
+                console.log(error);
+                this.errored = true;
+            })
+        }
       },
       highlightText(text) {
         if (!this.searchText) return text;
@@ -367,9 +401,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-::placeholder {
-  color: rgb(194, 147, 216);
-}
-</style>

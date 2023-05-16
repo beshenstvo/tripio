@@ -3,7 +3,7 @@
   <div class="row d-flex justify-content-between mt-3 mb-4">
     <div class="col-md-12" style="margin-top: auto; margin-bottom: auto;">
       <div class="input-group">
-        <input type="text" class="form-control searchInput" placeholder="Введите имя или сообщение" aria-describedby="button-addon2" v-model="searchText">
+        <input type="text" class="form-control searchInput" placeholder="Введите имя или сообщение" aria-describedby="button-addon2" v-model.trim="searchText">
         <button class="btn searchButton" type="button" id="button-addon2"><i class="fas fa-search"></i></button>
       </div>
     </div>

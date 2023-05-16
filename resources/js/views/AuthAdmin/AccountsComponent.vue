@@ -13,7 +13,7 @@
 
       <div class="col-md-9" style="margin-top: auto; margin-bottom: auto;">
         <div class="input-group">
-          <input type="text" class="form-control searchInput" placeholder="Введите имя" aria-describedby="button-addon2"  v-model="searchText">
+          <input type="text" class="form-control searchInput" placeholder="Введите имя" aria-describedby="button-addon2"  v-model.trim="searchText">
           <button class="btn searchButton" type="button" id="button-addon2"><i class="fas fa-search"></i></button>
         </div>
       </div>
