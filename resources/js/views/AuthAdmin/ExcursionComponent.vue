@@ -89,26 +89,33 @@
               <form>
                 <div class="mb-3">
                   <label for="route-city">Выберите город маршрута</label>
-                  <select class="form-control" id="route-city" v-model="city_id">
+                  <select class="form-control" id="route-city" v-model.trim="v$.city_id.$model">
                     <option v-for="city in cities" :key="city.id" :value="city.id">{{ city.name }}</option>
                   </select>
+                  <div v-if="v$.city_id.$error" class="text-danger">{{ v$.city_id.$error }}</div>
                 </div>
                 <div class="mb-3">
                   <label for="route-name">Название маршрута</label>
-                  <input type="text" class="form-control" id="route-name" placeholder="Введите название маршрута" v-model="name">
+                  <input type="text" class="form-control" id="route-name" placeholder="Введите название маршрута" v-model.trim="v$.name.$model" :class="{'is-invalid': v$.name.$error}">
+                  <span class="invalid-feedback" v-if="v$.name.$error">Поле обязательно для заполнения</span>
                 </div>
                 <div class="mb-3">
                   <label for="route-description">Описание маршрута</label>
-                  <textarea class="form-control" id="route-description" rows="3" placeholder="Введите описание маршрута" v-model="description"></textarea>
+                  <textarea class="form-control" id="route-description" rows="3" placeholder="Введите описание маршрута" v-model.trim="v$.description.$model" :class="{'is-invalid': v$.description.$error}"></textarea>
+                  <span class="invalid-feedback" v-if="v$.description.$error">Поле обязательно для заполнения</span>
                 </div>
                 <div class="mb-3">
                   <label for="route-duration">Длительность мероприятия</label>
-                  <input type="text" class="form-control" id="route-duration" placeholder="Введите длительность мероприятия" v-model="duration">
+                  <input type="text" class="form-control" id="route-duration" placeholder="Введите длительность мероприятия" v-model.trim="v$.duration.$model" :class="{'is-invalid': v$.duration.$error}">
+                  <span class="invalid-feedback" v-if="v$.duration.$error">Поле обязательно для заполнения</span>
                 </div>
 
                 <div class="mb-3">
                   <label for="price">Стоимость услуги</label>
-                  <input type="text" class="form-control" id="price" placeholder="Введите стоимость услуги" v-model="price">
+                  <input type="text" class="form-control" id="price" placeholder="Введите стоимость услуги" v-model.trim="v$.price.$model" :class="{'is-invalid': v$.price.$error}">
+                  <span class="invalid-feedback" v-if="v$.price.required.$invalid">Поле обязательно для заполнения {{ v$.price.required.$invalid }}</span>
+                  <span class="invalid-feedback" v-if="v$.price.integer.$invalid">Поле должно содержать только числа</span>
+                  <span class="invalid-feedback" v-if="v$.price.positive.$invalid && !v$.price.integer.$invalid">Поле должно содержать только числа больше 0</span>
                 </div>
                 <div class="mb-3">
                   <label for="type">Тип услуги</label>
@@ -152,7 +159,13 @@
 
 <script scoped>
 import axios from 'axios';
+import { useVuelidate } from '@vuelidate/core'
+import { required, minLength, integer } from '@vuelidate/validators'
+
 export default {
+  setup () {
+    return { v$: useVuelidate() }
+  },
   data() {
     return {
       loading: true,
@@ -189,6 +202,22 @@ export default {
       }, 
       fileName: ''
     }
+  },
+   validations: {
+    city_id: { required },
+    name: { required, minLength: minLength(15) },
+    description: { required, minLength: minLength(30) },
+    duration: { required, minLength: minLength(4) },
+    price: { 
+      required,
+      integer,
+      positive(value) {
+        return value > 0;
+      }
+    },
+    // type: { required },
+    // kind: { required },
+    // fileName: { required }
   },
   mounted() {
     this.getServices();
@@ -264,7 +293,12 @@ export default {
         console.log(this.file);
       },
       async saveUpdates(id) {
-        await axios.get('api/services/'+id).then(response => {
+        this.v$.$touch();
+        if(this.v$.$anyError) {
+          return;
+        }
+        if (!this.v$.$invalid) {
+          await axios.get('api/services/'+id).then(response => {
           this.originalService.city_id = response.data.data.city_id
           this.originalService.user_id = response.data.data.user_id
           this.originalService.name = response.data.data.name
@@ -322,6 +356,7 @@ export default {
               console.log(error);
               this.errored = true;
           })
+        }
       },
       showModalEditingFunc(id) {
         this.showModalEditing = true;
@@ -341,7 +376,6 @@ export default {
               console.log(error);
               this.errored = true;
           })
-
       }, 
       highlightText(text) {
         if (!this.searchText) return text;
@@ -351,9 +385,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-::placeholder {
-  color: rgb(194, 147, 216);
-}
-</style>
