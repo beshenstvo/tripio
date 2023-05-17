@@ -97,19 +97,19 @@
                   <label for="route-name">Название маршрута</label>
                   <input type="text" class="form-control" id="route-name" placeholder="Введите название маршрута" v-model.trim="v$.name.$model" :class="{'is-invalid': v$.name.$error}">
                   <span class="invalid-feedback" v-if="v$.name.required.$invalid">Поле обязательно для заполнения</span>
-                  <span class="invalid-feedback" v-if="v$.name.minLength.$invalid">Поле должно содержать количесвто символов больше 15</span>
+                  <span class="invalid-feedback" v-if="v$.name.minLength.$invalid">Поле должно содержать количество символов больше 15</span>
                 </div>
                 <div class="mb-3">
                   <label for="route-description">Описание маршрута</label>
                   <textarea class="form-control" id="route-description" rows="3" placeholder="Введите описание маршрута" v-model.trim="v$.description.$model" :class="{'is-invalid': v$.description.$error}"></textarea>
                   <span class="invalid-feedback" v-if="v$.description.required.$invalid">Поле обязательно для заполнения</span>
-                  <span class="invalid-feedback" v-if="v$.description.minLength.$invalid">Поле должно содержать количесвто символов больше 30</span>
+                  <span class="invalid-feedback" v-if="v$.description.minLength.$invalid">Поле должно содержать количество символов больше 30</span>
                 </div>
                 <div class="mb-3">
                   <label for="route-duration">Длительность мероприятия</label>
                   <input type="text" class="form-control" id="route-duration" placeholder="Введите длительность мероприятия" v-model.trim="v$.duration.$model" :class="{'is-invalid': v$.duration.$error}">
                   <span class="invalid-feedback" v-if="v$.duration.required.$invalid">Поле обязательно для заполнения</span>
-                  <span class="invalid-feedback" v-if="v$.duration.minLength.$invalid">Поле должно содержать количесвто символов больше 4</span>
+                  <span class="invalid-feedback" v-if="v$.duration.minLength.$invalid">Поле должно содержать количество символов больше 4</span>
                 </div>
 
                 <div class="mb-3">
