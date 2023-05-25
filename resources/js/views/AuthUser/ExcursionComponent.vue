@@ -93,15 +93,24 @@
                 </div>
                 <div class="mb-3">
                   <label for="route-city">Ваше имя</label>
-                  <input type="text" class="form-control" id="name" placeholder="Иван" v-model="name" required>
+                  <input type="text" class="form-control" id="name" placeholder="Иван" v-model.trim="v$.name.$model" :class="{'is-invalid': v$.name.$error}" required>
+                  <span class="invalid-feedback" v-if="v$.name.required.$invalid">Поле обязательно для заполнения</span>
+                  <span class="invalid-feedback" v-if="v$.name.minLength.$invalid && !v$.name.required.$invalid">Поле должно содержать количество символов меньше 2</span>
+                  <span class="invalid-feedback" v-if="v$.name.maxLength.$invalid && !v$.name.required.$invalid">Поле должно содержать количество символов больше 50</span>
+                  <span class="invalid-feedback" v-if="v$.name.customRegex.$invalid && !v$.name.required.$invalid">Поле должно содержать только буквы, пробелы и тире</span>
                 </div>
                 <div class="mb-3">
                   <label for="route-name">Введите телефон</label>
-                  <input type="text" class="form-control" id="phone" v-mask="'+7(###) ###-##-##'" placeholder="+7(999)999-99-99" v-model="phone" required>
+                  <input type="text" class="form-control" id="phone" v-mask="'+7(###) ###-##-##'" placeholder="+7(999)999-99-99" v-model.trim="v$.phone.$model" :class="{'is-invalid': v$.phone.$error}" required>
+                  <span class="invalid-feedback" v-if="v$.phone.required.$invalid">Поле обязательно для заполнения</span>
+                  <span class="invalid-feedback" v-if="v$.phone.minLength.$invalid && !v$.phone.required.$invalid">Поле должно содержать полный номер телефона</span>
                 </div>
                  <div class="mb-3">
                   <label for="route-name">Введите сообщение</label>
-                  <textarea class="form-control" id="phone" placeholder="Сообщение" v-model="message"></textarea>
+                  <textarea class="form-control" id="phone" placeholder="Сообщение" v-model.trim="v$.message.$model" :class="{'is-invalid': v$.message.$error}"></textarea>
+                  <span class="invalid-feedback" v-if="v$.message.required.$invalid">Поле обязательно для заполнения</span>
+                  <span class="invalid-feedback" v-if="v$.message.minLength.$invalid && !v$.message.required.$invalid">Поле должно содержать количество символов меньше 10</span>
+                  <span class="invalid-feedback" v-if="v$.message.maxLength.$invalid && !v$.message.required.$invalid">Поле должно содержать количество символов больше 100</span>
                 </div>
                 
     
@@ -120,8 +129,17 @@
 </template>
 
 <script scoped>
-import axios from 'axios';
+import { useVuelidate } from '@vuelidate/core'
+import { required, minLength, maxLength } from '@vuelidate/validators'
+
+function customRegex (value) {
+  const regex = /^[a-zA-ZА-Яа-я\s-]+$/;
+  return regex.test(value)
+}
 export default {
+  setup () {
+    return { v$: useVuelidate() }
+  },
   data() {
     return {
       loading: true,
@@ -143,6 +161,11 @@ export default {
       fileName: '', 
       isLoggedIn: localStorage.getItem("isLoggedIn")
     }
+  },
+  validations: {
+    name: { required, minLength: minLength(2), maxLength: maxLength(50), customRegex },
+    message: { required, minLength: minLength(10), maxLength: maxLength(100)},
+    phone: { required, minLength: minLength(17)}
   },
   mounted() {
     this.getServices();
@@ -208,31 +231,37 @@ export default {
         return text.replace(regex, '<mark>$1</mark>');
       },
       send() {
-        let formData = new FormData();
-        formData.append('service_id', this.service_id);
-        formData.append('client_phone', this.phone);
-        formData.append('client_name', this.name);
-        formData.append('message', this.message);
+        this.v$.$touch();
+        if(this.v$.$anyError) {
+          return;
+        }
+        if (!this.v$.$invalid) {
+          let formData = new FormData();
+          formData.append('service_id', this.service_id);
+          formData.append('client_phone', this.phone);
+          formData.append('client_name', this.name);
+          formData.append('message', this.message);
 
-        console.log(formData.get('service_id'))
-        console.log(formData.get('client_phone'))
-        console.log(formData.get('client_name'))
-        console.log(formData.get('message'))
+          console.log(formData.get('service_id'))
+          console.log(formData.get('client_phone'))
+          console.log(formData.get('client_name'))
+          console.log(formData.get('message'))
 
-        axios.post('/api/requests', {
-          service_id: this.service_id,
-          client_phone: this.phone,
-          client_name: this.name,
-          message: this.message
-        })
-        .catch( error => {
-          console.log(error);
-          this.errored = true;
-        })
-        .finally( () => {
-          this.showModal = false
-          alert('Ваша заявка отправлена!')
-        })
+          axios.post('/api/requests', {
+            service_id: this.service_id,
+            client_phone: this.phone,
+            client_name: this.name,
+            message: this.message
+          })
+          .catch( error => {
+            console.log(error);
+            this.errored = true;
+          })
+          .finally( () => {
+            this.showModal = false
+            alert('Ваша заявка отправлена!')
+          })
+        }
       }
   }
 }

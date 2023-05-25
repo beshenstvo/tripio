@@ -254,7 +254,7 @@ export default {
   },
   validations() {
     return {
-       name: {
+      name: {
       required,
     },
     email: {

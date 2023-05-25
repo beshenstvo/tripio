@@ -38,7 +38,7 @@
             </div>
           </div>
           <div class="card-footer d-flex justify-content-between">
-            <a class="btn btn-outline-primary" @click="showModalEditingFunc( route.id )"><i class="fas fa-edit"></i><span class="ms-1">Изменить</span></a>
+            <a class="btn btn-outline-primary" @click="showModalEditingFunc( route.id ), name = '', file = '', description = '', duration = ''"><i class="fas fa-edit"></i><span class="ms-1">Изменить</span></a>
             <a class="btn btn-outline-danger mr-2" v-on:click="deleteRoute( route.id )"><i class="fas fa-trash"></i><span class="ms-1">Удалить</span></a>
           </div>
         </div>
@@ -115,7 +115,8 @@
                 </div>
                 <div class="mb-3">
                   <label for="formFile" class="form-label">Изображение</label>
-                  <input class="form-control" type="file" id="formFile" @change="handleFileChange">
+                  <input class="form-control" type="file" id="formFile" @change="handleFileChange" @click="checkSelectedImage = true" :class="{'is-invalid': errorFile}">
+                  <span class="invalid-feedback" v-if="errorFile">Изображение должно иметь размер меньше 1 Мб и должно иметь формат png, jpeg, jpg, svg</span>
                 </div>
               </form>
             </div>
@@ -170,7 +171,8 @@
                     <img v-if="fileName && !checkSelectedInput" class="innerimg" style="width: 50%" :src="'/api/image/public/'+fileName" alt="">
                   </div>
                   <input v-if="!checkSelectedInput" type="text" id='photo' name="photo" :value="fileName"  class="form-control mb-2" disabled>
-                  <input class="form-control" type="file" id="formFile" @change="handleFileChange" placeholder="tatata">
+                  <input class="form-control" type="file" id="formFile" @change="handleFileChange"  @click="checkSelectedImage = true" :class="{'is-invalid': errorFile}">
+                  <span class="invalid-feedback" v-if="errorFile">Изображение должно иметь размер меньше 1 Мб и должно иметь формат png, jpeg, jpg, svg</span>
                 </div>
               </form>
             </div>
@@ -190,6 +192,7 @@
 import axios from 'axios';
 import { useVuelidate } from '@vuelidate/core'
 import { required, minLength, integer } from '@vuelidate/validators'
+import { maxSize, validFormat } from '../../validationsForImage'
 
 export default {
   setup () {
@@ -222,6 +225,7 @@ export default {
         description: '',
         duration: ''
       }, 
+      errorFile: false
     }
   },
   validations: {
@@ -238,7 +242,7 @@ export default {
       return this.name !== '' && this.description !== '' && this.duration !== '' && this.file !== '' && this.city_id !== '' && this.selectImg;
     },
     isDisabledEdit() {
-      return this.name !== '' && this.description !== '' && this.duration !== '' && this.file !== '' && this.city_id !== '';
+      return this.name !== '' && this.description !== '' && this.duration !== '' && this.city_id !== '';
     },
     filteredData() {
       return this.$options.filters.searchFilter(this.data, this.searchText);
@@ -301,69 +305,88 @@ export default {
         this.selectImg = true;
       },
       add() {
-        let formData = new FormData();
-        formData.append('city_id', this.city_id);
-        formData.append('name', this.name);
-        formData.append('description', this.description);
-        formData.append('duration', this.duration);
-        formData.append('photo', this.file);
-
-        axios.post('/api/routes/', formData)
-          .then(response => {
-            console.log(response.status);
-            if(response.status == 200) {
-              this.showModal = false
-              this.checkSelectedInput = false
-              alert('Данные созданы')
-            }
-            this.getReadyRoutes()
-          })
-          .catch( error => {
-              console.log(error);
-              this.errored = true;
-          })
-      },
-      async saveUpdates(id) {
-        await axios.get('api/routes/'+id).then(response => {
-          this.originalRoute.city_id = response.data.data.city_id
-          this.originalRoute.name = response.data.data.name
-          this.originalRoute.description = response.data.data.description
-          this.originalRoute.duration = response.data.data.duration
-          this.originalRoute.photo = response.data.data.photo
-        })
-        
-        if (
-          this.city_id == this.originalRoute.city_id &&
-          this.name == this.originalRoute.name &&
-          this.description == this.originalRoute.description &&
-          this.duration == this.originalRoute.duration &&
-          !this.checkSelectedImage &&
-          this.fileName == this.originalRoute.photo
-        ) {
-          this.showModalEditing = false;
+        this.v$.$touch();
+        if(this.v$.$anyError) {
           return;
         }
-
-        let formData = new FormData();
-        formData.append('_method', 'PUT');
-        formData.append('city_id', this.city_id);
-        formData.append('name', this.name);
-        formData.append('description', this.description);
-        formData.append('duration', this.duration);
-
-        if((this.file !== null)) {
-          formData.append('photo', this.file);
-          console.log('!==')
+        if(!validFormat(this.file) || !maxSize(1024)(this.file)) {
+          this.errorFile = true;
+          return;
         }
-        console.log('file '+this.file, 'fileName'+this.fileName)
+        if (!this.v$.$invalid) {
+          let formData = new FormData();
+          formData.append('city_id', this.city_id);
+          formData.append('name', this.name);
+          formData.append('description', this.description);
+          formData.append('duration', this.duration);
+          formData.append('photo', this.file);
 
-        axios.post('/api/routes/'+id, formData)
+          axios.post('/api/routes/', formData)
+            .then(response => {
+              console.log(response.status);
+              if(response.status == 200) {
+                this.showModal = false
+                this.checkSelectedInput = false
+                this.errorFile = false
+                alert('Данные созданы')
+              }
+              this.getReadyRoutes()
+            })
+            .catch( error => {
+                console.log(error);
+                this.errored = true;
+            })
+        }
+      },
+      async saveUpdates(id) {
+        this.v$.$touch();
+        if(this.v$.$anyError) {
+          return;
+        }
+        if (!this.v$.$invalid) {
+          await axios.get('api/routes/'+id).then(response => {
+            this.originalRoute.city_id = response.data.data.city_id
+            this.originalRoute.name = response.data.data.name
+            this.originalRoute.description = response.data.data.description
+            this.originalRoute.duration = response.data.data.duration
+            this.originalRoute.photo = response.data.data.photo
+          })
+          
+          if (
+            this.city_id == this.originalRoute.city_id &&
+            this.name == this.originalRoute.name &&
+            this.description == this.originalRoute.description &&
+            this.duration == this.originalRoute.duration &&
+            this.fileName == this.originalRoute.photo &&
+            !this.checkSelectedImage
+          ) {
+            this.showModalEditing = false;
+            return;
+          }
+
+          let formData = new FormData();
+          formData.append('_method', 'PUT');
+          formData.append('city_id', this.city_id);
+          formData.append('name', this.name);
+          formData.append('description', this.description);
+          formData.append('duration', this.duration);
+
+          if((this.file !== null)) {
+            if(!validFormat(this.file) || !maxSize(1024)(this.file)) {
+              this.errorFile = true;
+              return;
+            }
+            formData.append('photo', this.file);
+          }
+
+          axios.post('/api/routes/'+id, formData)
           .then(response => {
             console.log(response.status);
             if(response.status == 200) {
               this.getReadyRoutes()
               alert('Данные обновлены')
               this.showModalEditing = false
+              this.errorFile = false
               return
             }
             this.getReadyRoutes()
@@ -372,6 +395,7 @@ export default {
               console.log(error);
               this.errored = true;
           })
+        }
       },
       showModalEditingFunc(id) {
         this.showModalEditing = true;
@@ -399,9 +423,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-::placeholder {
-  color: rgb(194, 147, 216);
-}
-</style>

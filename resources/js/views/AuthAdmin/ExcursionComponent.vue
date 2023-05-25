@@ -115,7 +115,7 @@
                 <div class="mb-3">
                   <label for="price">Стоимость услуги</label>
                   <input type="text" class="form-control" id="price" placeholder="Введите стоимость услуги" v-model.trim="v$.price.$model" :class="{'is-invalid': v$.price.$error}">
-                  <span class="invalid-feedback" v-if="v$.price.required.$invalid">Поле обязательно для заполнения {{ v$.price.required.$invalid }}</span>
+                  <span class="invalid-feedback" v-if="v$.price.required.$invalid">Поле обязательно для заполнения</span>
                   <span class="invalid-feedback" v-if="v$.price.integer.$invalid">Поле должно содержать только числа</span>
                   <span class="invalid-feedback" v-if="v$.price.positive.$invalid && !v$.price.integer.$invalid">Поле должно содержать только числа больше 0</span>
                 </div>
@@ -143,13 +143,14 @@
                     <img v-if="fileName && !checkSelectedInput" class="innerimg" style="width: 50%" :src="'/api/image/public/'+fileName" alt="">
                   </div>
                   <input v-if="!checkSelectedInput" type="text" id='photo' name="photo" :value="fileName"  class="form-control mb-2" disabled>
-                  <input class="form-control" type="file" id="formFile" @change="handleFileChange" @click="checkSelectedImage = true">
+                  <input class="form-control" type="file" id="formFile" @change="handleFileChange" @click="checkSelectedImage = true" :class="{'is-invalid': errorFile}">
+                  <span class="invalid-feedback" v-if="errorFile">Изображение должно иметь размер меньше 1 Мб и должно иметь формат png, jpeg, jpg, svg</span>
                 </div>
               </form>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" @click="showModalEditing = false, checkSelectedInput = false, fileName = ''">Закрыть</button>
-              <button type="button" class="btn btn-primary" :disabled="!isDisabled" @click="saveUpdates(this.id), showModalEditing = false">Сохранить</button>
+              <button type="button" class="btn btn-primary" :disabled="!isDisabled" @click="saveUpdates(this.id)">Сохранить</button>
             </div>
           </div>
         </div>
@@ -163,6 +164,7 @@
 import axios from 'axios';
 import { useVuelidate } from '@vuelidate/core'
 import { required, minLength, integer } from '@vuelidate/validators'
+import { maxSize, validFormat } from '../../validationsForImage'
 
 export default {
   setup () {
@@ -202,7 +204,8 @@ export default {
         type: '',
         kind: ''
       }, 
-      fileName: ''
+      fileName: '',
+      errorFile: false
     }
   },
   validations: {
@@ -335,17 +338,21 @@ export default {
         formData.append('type', this.type);
         formData.append('kind', this.kind);
         formData.append('price', this.price);
-        if((this.file !== null)) {
-          formData.append('photo', this.file);
-          console.log('!==')
-        }
 
+        if((this.file !== null)) {
+          if(!validFormat(this.file) || !maxSize(1024)(this.file)) {
+            this.errorFile = true;
+            return;
+          }
+          formData.append('photo', this.file);
+        }
         axios.post('/api/services/'+id, formData)
           .then(response => {
             console.log(response.status);
             if(response.status == 200) {
               this.getServices()
               alert('Данные обновлены')
+              this.errorFile = false
               this.showModalEditing = false
               return
             }

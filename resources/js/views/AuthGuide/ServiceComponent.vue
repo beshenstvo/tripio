@@ -100,19 +100,28 @@
                 </div>
                 <div class="mb-3">
                   <label for="route-name">Название услуги</label>
-                  <input type="text" class="form-control" id="route-name" placeholder="Введите название услуги" v-model="name">
+                  <input type="text" class="form-control" id="route-name" placeholder="Введите название услуги" v-model.trim="v$.name.$model" :class="{'is-invalid': v$.name.$error}">
+                  <span class="invalid-feedback" v-if="v$.name.required.$invalid">Поле обязательно для заполнения</span>
+                  <span class="invalid-feedback" v-if="v$.name.minLength.$invalid">Поле должно содержать количество символов больше 15</span>
                 </div>
                 <div class="mb-3">
                   <label for="route-description">Описание услуги</label>
-                  <textarea class="form-control" id="route-description" rows="3" placeholder="Введите описание услуги" v-model="description"></textarea>
+                  <textarea class="form-control" id="route-description" rows="3" placeholder="Введите описание услуги" v-model.trim="v$.description.$model" :class="{'is-invalid': v$.description.$error}"></textarea>
+                  <span class="invalid-feedback" v-if="v$.description.required.$invalid">Поле обязательно для заполнения</span>
+                  <span class="invalid-feedback" v-if="v$.description.minLength.$invalid">Поле должно содержать количество символов больше 30</span>
                 </div>
                 <div class="mb-3">
                   <label for="route-duration">Длительность услуги</label>
-                  <input type="text" class="form-control" id="route-duration" placeholder="Введите длительность услуги" v-model="duration">
+                  <input type="text" class="form-control" id="route-duration" placeholder="Введите длительность услуги" v-model.trim="v$.duration.$model" :class="{'is-invalid': v$.duration.$error}">
+                  <span class="invalid-feedback" v-if="v$.duration.required.$invalid">Поле обязательно для заполнения</span>
+                  <span class="invalid-feedback" v-if="v$.duration.minLength.$invalid">Поле должно содержать количество символов больше 4</span>
                 </div>
                 <div class="mb-3">
                   <label for="price">Стоимость услуги</label>
-                  <input type="text" class="form-control" id="price" placeholder="Введите стоимость услуги" v-model="price">
+                  <input type="text" class="form-control" id="price" placeholder="Введите стоимость услуги" v-model.trim="v$.price.$model" :class="{'is-invalid': v$.price.$error}">
+                  <span class="invalid-feedback" v-if="v$.price.required.$invalid">Поле обязательно для заполнения</span>
+                  <span class="invalid-feedback" v-if="v$.price.integer.$invalid">Поле должно содержать только числа</span>
+                  <span class="invalid-feedback" v-if="v$.price.positive.$invalid && !v$.price.integer.$invalid">Поле должно содержать только числа больше 0</span>
                 </div>
                 <div class="mb-3">
                   <label for="type">Тип услуги</label>
@@ -133,7 +142,8 @@
                 </div>
                 <div class="mb-3">
                   <label for="formFile" class="form-label">Загрузите изображение</label>
-                  <input class="form-control" type="file" id="formFile" @change="handleFileChange" @click="checkSelectedImage = true">
+                  <input class="form-control" type="file" id="formFile" @change="handleFileChange" @click="checkSelectedImage = true" :class="{'is-invalid': errorFile}">
+                  <span class="invalid-feedback" v-if="errorFile">Изображение должно иметь размер меньше 1 Мб и должно иметь формат png, jpeg, jpg, svg</span>
                 </div>
               </form>
             </div>
@@ -166,20 +176,28 @@
                 </div>
                 <div class="mb-3">
                   <label for="route-name">Название маршрута</label>
-                  <input type="text" class="form-control" id="route-name" placeholder="Введите название маршрута" v-model="name">
+                  <input type="text" class="form-control" id="route-name" placeholder="Введите название маршрута" v-model.trim="v$.name.$model" :class="{'is-invalid': v$.name.$error}">
+                  <span class="invalid-feedback" v-if="v$.name.required.$invalid">Поле обязательно для заполнения</span>
+                  <span class="invalid-feedback" v-if="v$.name.minLength.$invalid">Поле должно содержать количество символов больше 15</span>
                 </div>
                 <div class="mb-3">
-                  <label for="route-description">Описание маршрута</label>
-                  <textarea class="form-control" id="route-description" rows="3" placeholder="Введите описание маршрута" v-model="description"></textarea>
+                  <label for="route-description">Описание услуги</label>
+                  <textarea class="form-control" id="route-description" rows="3" placeholder="Введите описание услуги" v-model.trim="v$.description.$model" :class="{'is-invalid': v$.description.$error}"></textarea>
+                  <span class="invalid-feedback" v-if="v$.description.required.$invalid">Поле обязательно для заполнения</span>
+                  <span class="invalid-feedback" v-if="v$.description.minLength.$invalid">Поле должно содержать количество символов больше 30</span>
                 </div>
                 <div class="mb-3">
-                  <label for="route-duration">Длительность мероприятия</label>
-                  <input type="text" class="form-control" id="route-duration" placeholder="Введите длительность мероприятия" v-model="duration">
+                  <label for="route-duration">Длительность услуги</label>
+                  <input type="text" class="form-control" id="route-duration" placeholder="Введите длительность услуги" v-model.trim="v$.duration.$model" :class="{'is-invalid': v$.duration.$error}">
+                  <span class="invalid-feedback" v-if="v$.duration.required.$invalid">Поле обязательно для заполнения</span>
+                  <span class="invalid-feedback" v-if="v$.duration.minLength.$invalid">Поле должно содержать количество символов больше 4</span>
                 </div>
-
                 <div class="mb-3">
                   <label for="price">Стоимость услуги</label>
-                  <input type="text" class="form-control" id="price" placeholder="Введите стоимость услуги" v-model="price">
+                  <input type="text" class="form-control" id="price" placeholder="Введите стоимость услуги" v-model.trim="v$.price.$model" :class="{'is-invalid': v$.price.$error}">
+                  <span class="invalid-feedback" v-if="v$.price.required.$invalid">Поле обязательно для заполнения</span>
+                  <span class="invalid-feedback" v-if="v$.price.integer.$invalid">Поле должно содержать только числа</span>
+                  <span class="invalid-feedback" v-if="v$.price.positive.$invalid && !v$.price.integer.$invalid">Поле должно содержать только числа больше 0</span>
                 </div>
                 <div class="mb-3">
                   <label for="type">Тип услуги</label>
@@ -205,13 +223,14 @@
                     <img v-if="fileName && !checkSelectedInput" class="innerimg" style="width: 50%" :src="'/api/image/public/'+fileName" alt="">
                   </div>
                   <input v-if="!checkSelectedInput" type="text" id='photo' name="photo" :value="fileName"  class="form-control mb-2" disabled>
-                  <input class="form-control" type="file" id="formFile" @change="handleFileChange" @click="checkSelectedImage = true">
+                  <input class="form-control" type="file" id="formFile" @change="handleFileChange" @click="checkSelectedImage = true" :class="{'is-invalid': errorFile}">
+                  <span class="invalid-feedback" v-if="errorFile">Изображение должно иметь размер меньше 1 Мб и должно иметь формат png, jpeg, jpg, svg</span>
                 </div>
               </form>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" @click="showModalEditing = false, checkSelectedInput = false, fileName = ''">Закрыть</button>
-              <button type="button" class="btn btn-primary" :disabled="!isDisabled" @click="saveUpdates(this.id), showModalEditing = false">Сохранить</button>
+              <button type="button" class="btn btn-primary" :disabled="!isDisabled" @click="saveUpdates(this.id)">Сохранить</button>
             </div>
           </div>
         </div>
@@ -223,7 +242,14 @@
 
 <script scoped>
 import axios from 'axios';
+import { useVuelidate } from '@vuelidate/core'
+import { required, minLength, integer } from '@vuelidate/validators'
+import { maxSize, validFormat } from '../../validationsForImage'
+
 export default {
+  setup () {
+    return { v$: useVuelidate() }
+  },
   data() {
     return {
       loading: true,
@@ -258,7 +284,20 @@ export default {
         type: '',
         kind: ''
       }, 
-      fileName: ''
+      fileName: '',
+      errorFile: false
+    }
+  },
+  validations: {
+    name: { required, minLength: minLength(15) }, 
+    description: { required, minLength: minLength(30)},
+    duration: { required, minLength: minLength(4)}, 
+    price: { 
+      required,
+      integer,
+      positive(value) {
+        return value > 0;
+      }
     }
   },
   mounted() {
@@ -271,7 +310,7 @@ export default {
   }, 
   computed: {
     isDisabled() {
-      return this.name !== '' && this.description !== '' && this.duration !== '' && this.city_id !== '' && this.price !== '' && this.type !== '' && this.kind !== '' && this.selectImg;
+      return this.name !== '' && this.description !== '' && this.duration !== '' && this.city_id !== '' && this.price !== '' && this.type !== '' && this.kind !== '' && this.file != null;
     },
     isDisabledEdit() {
       return this.name !== '' && this.description !== '' && this.duration !== '' && this.city_id !== '' && this.price !== '' && this.type !== '' && this.kind !== '';
@@ -339,18 +378,27 @@ export default {
         console.log(this.file);
       },
       add() {
-        let formData = new FormData();
-        formData.append('city_id', this.city_id);
-        formData.append('user_id', this.currentUser.id);
-        formData.append('name', this.name);
-        formData.append('description', this.description);
-        formData.append('duration', this.duration);
-        formData.append('photo', this.file);
-        formData.append('type', this.type);
-        formData.append('kind', this.kind);
-        formData.append('price', this.price);
+        this.v$.$touch();
+        if(this.v$.$anyError) {
+          return;
+        }
+        if(!validFormat(this.file) || !maxSize(1024)(this.file)) {
+          this.errorFile = true;
+          return;
+        }
+        if (!this.v$.$invalid) {
+          let formData = new FormData();
+          formData.append('city_id', this.city_id);
+          formData.append('user_id', this.currentUser.id);
+          formData.append('name', this.name);
+          formData.append('description', this.description);
+          formData.append('duration', this.duration);
+          formData.append('photo', this.file);
+          formData.append('type', this.type);
+          formData.append('kind', this.kind);
+          formData.append('price', this.price);
 
-        axios.post('/api/services/', formData)
+          axios.post('/api/services/', formData)
           .then(response => {
             console.log(response);
             console.log(response.status);
@@ -364,9 +412,15 @@ export default {
           .catch( error => {
               this.errored = true;
           })
+        }
       },
       async saveUpdates(id) {
-        await axios.get('api/services/'+id).then(response => {
+        this.v$.$touch();
+        if(this.v$.$anyError) {
+          return;
+        }
+        if (!this.v$.$invalid) { 
+          await axios.get('api/services/'+id).then(response => {
           this.originalService.city_id = response.data.data.city_id
           this.originalService.user_id = response.data.data.user_id
           this.originalService.name = response.data.data.name
@@ -405,8 +459,11 @@ export default {
         formData.append('kind', this.kind);
         formData.append('price', this.price);
         if((this.file !== null)) {
+          if(!validFormat(this.file) || !maxSize(1024)(this.file)) {
+            this.errorFile = true;
+            return;
+          }
           formData.append('photo', this.file);
-          console.log('!==')
         }
 
         axios.post('/api/services/'+id, formData)
@@ -425,6 +482,7 @@ export default {
               console.log(error);
               this.errored = true;
           })
+        }
       },
       showModalEditingFunc(id) {
         this.showModalEditing = true;

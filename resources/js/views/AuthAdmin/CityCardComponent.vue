@@ -97,17 +97,18 @@
                   <label for="route-name">Название карточки</label>
                   <input type="text" class="form-control" id="route-name" placeholder="Введите название маршрута" v-model.trim="v$.name.$model" :class="{'is-invalid': v$.name.$error}">
                   <span class="invalid-feedback" v-if="v$.name.required.$invalid">Поле обязательно для заполнения</span>
-                  <span class="invalid-feedback" v-if="v$.name.minLength.$invalid">Поле должно содержать количесвто символов больше 15</span>
+                  <span class="invalid-feedback" v-if="v$.name.minLength.$invalid">Поле должно содержать количество символов больше 15</span>
                 </div>
                 <div class="mb-3">
                   <label for="route-description">Описание карточки</label>
                   <textarea class="form-control" id="route-description" rows="3" placeholder="Введите описание маршрута" v-model.trim="v$.description.$model" :class="{'is-invalid': v$.description.$error}"></textarea>
                   <span class="invalid-feedback" v-if="v$.description.required.$invalid">Поле обязательно для заполнения</span>
-                  <span class="invalid-feedback" v-if="v$.description.minLength.$invalid">Поле должно содержать количесвто символов больше 30</span>
+                  <span class="invalid-feedback" v-if="v$.description.minLength.$invalid">Поле должно содержать количество символов больше 30</span>
                 </div>
                 <div class="mb-3">
                   <label for="formFile" class="form-label">Изображение</label>
-                  <input class="form-control" type="file" id="formFile" @change="handleFileChange">
+                  <input class="form-control" type="file" id="formFile" @change="handleFileChange" @click="checkSelectedImage = true" :class="{'is-invalid': errorFile}">
+                  <span class="invalid-feedback" v-if="errorFile">Изображение должно иметь размер меньше 1 Мб и должно иметь формат png, jpeg, jpg, svg</span>
                 </div>
               </form>
               <div v-if="cities.length == 0">
@@ -145,13 +146,13 @@
                   <label for="route-name">Название карточки</label>
                   <input type="text" class="form-control" id="route-name" placeholder="Введите название маршрута"  v-model.trim="v$.name.$model" :class="{'is-invalid': v$.name.$error}">
                   <span class="invalid-feedback" v-if="v$.name.required.$invalid">Поле обязательно для заполнения</span>
-                  <span class="invalid-feedback" v-if="v$.name.minLength.$invalid">Поле должно содержать количесвто символов больше 15</span>
+                  <span class="invalid-feedback" v-if="v$.name.minLength.$invalid">Поле должно содержать количество символов больше 15</span>
                 </div>
                 <div class="mb-3">
                   <label for="route-description">Описание карточки </label>
                   <textarea class="form-control" id="route-description" rows="3" placeholder="Введите описание маршрута" v-model.trim="v$.description.$model" :class="{'is-invalid': v$.description.$error}"></textarea>
                   <span class="invalid-feedback" v-if="v$.description.required.$invalid">Поле обязательно для заполнения</span>
-                  <span class="invalid-feedback" v-if="v$.description.minLength.$invalid">Поле должно содержать количесвто символов больше 30</span>
+                  <span class="invalid-feedback" v-if="v$.description.minLength.$invalid">Поле должно содержать количество символов больше 30</span>
                 </div>
                 <div class="mb-3">
                   <label for="formFile" class="form-label">Текущее изображение</label>
@@ -159,13 +160,14 @@
                     <img v-if="fileName && !checkSelectedInput" class="innerimg" style="width: 50%" :src="'/api/image/public/'+fileName" alt="">
                   </div>
                   <input v-if="!checkSelectedInput" type="text" id='photo' name="photo" :value="fileName"  class="form-control mb-2" disabled>
-                  <input class="form-control" type="file" id="formFile" @change="handleFileChange" @click="checkSelectedImage = true">
+                  <input class="form-control" type="file" id="formFile" @change="handleFileChange"  @click="checkSelectedImage = true" :class="{'is-invalid': errorFile}">
+                  <span class="invalid-feedback" v-if="errorFile">Изображение должно иметь размер меньше 1 Мб и должно иметь формат png, jpeg, jpg, svg</span>
                 </div>
               </form>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" @click="showModalEditing = false, checkSelectedInput = false, fileName = ''">Закрыть</button>
-              <button type="button" class="btn btn-primary" :disabled="!isDisabledEdit" @click="saveUpdates(this.id), showModalEditing = false">Сохранить</button>
+              <button type="button" class="btn btn-primary" :disabled="!isDisabledEdit" @click="saveUpdates(this.id)">Сохранить</button>
             </div>
           </div>
         </div>
@@ -179,6 +181,7 @@
 import axios from 'axios';
 import { useVuelidate } from '@vuelidate/core'
 import { required, minLength, integer } from '@vuelidate/validators'
+import { maxSize, validFormat } from '../../validationsForImage'
 
 export default {
   setup () {
@@ -211,7 +214,8 @@ export default {
         name: '',
         description: ''
       }, 
-      fileName: ''
+      fileName: '',
+      errorFile: false
     }
   },
    validations: {
@@ -326,8 +330,11 @@ export default {
         formData.append('description', this.description);
 
         if((this.file !== null)) {
+          if(!validFormat(this.file) || !maxSize(1024)(this.file)) {
+            this.errorFile = true;
+            return;
+          }
           formData.append('photo', this.file);
-          console.log('!==')
         }
 
         axios.post('/api/citycards/'+id, formData)
@@ -367,6 +374,10 @@ export default {
       add() {
         this.v$.$touch();
         if(this.v$.$anyError) {
+          return;
+        }
+        if(!validFormat(this.file) || !maxSize(1024)(this.file)) {
+          this.errorFile = true;
           return;
         }
         if (!this.v$.$invalid) {

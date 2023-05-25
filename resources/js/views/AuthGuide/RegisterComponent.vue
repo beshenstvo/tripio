@@ -14,11 +14,13 @@
               <div class="form-outline form-white mb-4">
                 <input
                   type="text"
-                  v-model="form.name"
                   class="form-control form-control-lg"
                   id="name"
                   placeholder="Иван Иванов"
+                  v-model.trim="v$.name.$model" :class="{'is-invalid': v$.name.$error}"
                 />
+                <span class="invalid-feedback" style="text-align: left;" v-if="v$.name.required.$invalid">Поле обязательно для заполнения</span>
+                <span class="invalid-feedback" style="text-align: left;" v-if="v$.name.customRegex.$invalid && !v$.name.required.$invalid">Поле может содержать буквы, пробелы и тире</span>
                 <span class="text-danger" v-if="errors.name">
                   {{ errors.name[0] }}
                 </span>
@@ -27,11 +29,14 @@
               <div class="form-outline form-black mb-4">
                 <input
                   type="email"
-                  v-model="form.email"
                   class="form-control form-control-lg"
                   id="email"
                   placeholder="Email"
+                  v-model.trim="v$.email.$model" :class="{'is-invalid': v$.email.$error}"
                 />
+                <span class="invalid-feedback" style="text-align: left;" v-if="v$.email.required.$invalid">Поле должно быть заполнено</span>
+                <span class="invalid-feedback" style="text-align: left;" v-if="v$.email.email.$invalid && !v$.email.required.$invalid">Поле должно содержать email в правильном формате</span>
+                <span class="invalid-feedback" style="text-align: left;" v-if="v$.email.maxLength.$invalid && !v$.email.required.$invalid">Поле должно иметь длину не более 64 символов</span>
                 <span class="text-danger" v-if="errors.email">
                   {{ errors.email[0] }}
                 </span>
@@ -39,12 +44,21 @@
 
               <div class="form-outline form-black mb-4">
                 <input
-                  type="password"
-                  v-model="form.password"
+                  :type="showpassword ? 'text' : 'password'"
                   class="form-control form-control-lg"
                   id="password"
                   placeholder="Пароль"
+                   v-model.trim="v$.password.$model" :class="{'is-invalid': v$.password.$error}"
                 />
+                <span class="invalid-feedback" style="text-align: left;" v-if="v$.password.required.$invalid">Поле должно быть заполнено</span>
+                <span class="invalid-feedback" style="text-align: left;" v-if="v$.password.minLength.$invalid && !v$.password.required.$invalid">Пароль должен быть длиной не менее 6 символов</span>
+                <span class="invalid-feedback" style="text-align: left;" v-if="v$.password.customCheckPassword.$invalid && !v$.password.required.$invalid">Пароль должен содержать буквы, спецсимволы @$!%*?& и цифры</span>
+                 <div class="form-check mt-2" style="text-align: left;">
+                  <input class="form-check-input" type="checkbox" value="" id="checkPass" v-model="showpassword">
+                  <label class="form-check-label" for="checkPass">
+                    Показать пароль
+                  </label>
+                </div>
                 <span class="text-danger" v-if="errors.password">
                   {{ errors.password[0] }}
                 </span>
@@ -52,12 +66,19 @@
 
               <div class="form-outline form-black mb-4">
                 <input
-                  type="password"
-                  v-model="form.confirm_password"
+                  :type="showConfirm_password ? 'text' : 'password'"
                   class="form-control form-control-lg"
                   id="confirm_password"
                   placeholder="Подтвердите пароль"
+                  v-model.trim="v$.confirm_password.$model" :class="{'is-invalid': v$.confirm_password.$error}"
                 />
+                <span class="invalid-feedback" style="text-align: left;" v-if="v$.confirm_password.sameAsPassword.$invalid">Пароли должны совпадать</span>
+                <div class="form-check mt-2" style="text-align: left;">
+                  <input class="form-check-input" type="checkbox" value="" id="checkPassConfirm" v-model="showConfirm_password">
+                  <label class="form-check-label" for="checkPassConfirm">
+                    Показать пароль
+                  </label>
+                </div>
                 <span class="text-danger" v-if="errors.confirm_password">
                   {{ errors.confirm_password[0] }}
                 </span>
@@ -65,7 +86,7 @@
               
               <button class="btn btn-outline-dark btn-lg px-5" 
                 type="submit"
-                @click.prevent="register">Зарегистрироваться</button>
+                @click.prevent="register" :disabled="!isDisabled">Зарегистрироваться</button>
             </div>
             <div>
               <p class="mb-0">Уже есть аккаунт? <router-link class="text-black-50 fw-bold" :to="{ name: 'Guide.login' }">Войти</router-link>
@@ -80,42 +101,74 @@
 </template>
 
 <script>
+import { useVuelidate } from '@vuelidate/core'
+import { required, email, minLength, maxLength, sameAs } from '@vuelidate/validators'
+
+function customRegex (value) {
+  const regex = /^[a-zA-ZА-Яа-я\s-]+$/;
+  return regex.test(value)
+}
+
+function customCheckPassword (value) {
+  const regex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[a-zA-Z\d@$!%*?&]+$/;
+  return regex.test(value)
+}
+
 export default {
+  setup () {
+    return { v$: useVuelidate() }
+  },
   data() {
     return {
-      form: {
-        name: "",
-        email: "",
-        password: "",
-        confirm_password: ""
-      },
-      errors: []
+      name: "",
+      email: "",
+      password: "",
+      confirm_password: "",
+      errors: [],
+      showpassword: false,
+      showConfirm_password: false
     };
+  },
+  validations() {
+    return {
+      name: { required, customRegex },
+      email: { required, email, maxLength: maxLength(64)},
+      password: { required, minLength: minLength(6), customCheckPassword },
+      confirm_password: { sameAsPassword: sameAs(this.password) }
+    }
+  },
+  computed: {
+    isDisabled() {
+      return this.email !== '' && this.password !== '' && this.confirm_password !== '' && this.name !== '';
+    }
   },
   methods: {
     register() {
-      const data = {
-          name: this.form.name,
-          email : this.form.email,
-          password : this.form.password,
-          confirm_password: this.form.confirm_password
+      if(this.v$.$anyError) {
+        return;
       }
-      console.log(data)
+      if (!this.v$.$invalid) {
+        const data = {
+          name: this.name,
+          email : this.email,
+          password : this.password,
+          confirm_password: this.confirm_password
+        }
         axios.get('/sanctum/csrf-cookie');
         axios.post('/api/guide.register', data).then((res) => {
-          console.log(res)
-            if (res.data.success) {                        
-                //working and redirect to the home page
-                alert('Вы успешно зарегистрированы! Теперь можете войти в систему.')
-                this.$router.push({ path: "/guide/login" });
-            } else {     
-                //errors   
-                console.log('errors')                                     
-            }
+        if (res.data.success) {                        
+            //working and redirect to the home page
+            alert('Вы успешно зарегистрированы! Теперь можете войти в систему.')
+            this.$router.push({ path: "/guide/login" });
+        } else {     
+            //errors   
+            console.log('errors')                                     
+        }
         }).catch((e) => {
-            this.errors = e.response.data.errors
-            console.log(this.errors)
+          this.errors = e.response.data.errors
+          console.log(this.errors)
         })
+      }
     }
   }
 };

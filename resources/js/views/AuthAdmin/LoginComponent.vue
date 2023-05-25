@@ -17,8 +17,10 @@
                   id="email" 
                   class="form-control form-control-lg" 
                   placeholder="Email"
-                  v-model="form.email"
+                  v-model.trim="v$.email.$model" :class="{'is-invalid': v$.email.$error}"
                 />
+                <span class="invalid-feedback" v-if="v$.email.required.$invalid">Поле обязательно для заполнения</span>
+                <span class="invalid-feedback" v-if="v$.email.email.$invalid && !v$.email.required.$invalid">Поле должно содержать email в правильном формате</span>
                 <span class="text-danger" v-if="errors.email">
                   {{ errors.email[0] }}
                 </span>
@@ -30,8 +32,9 @@
                   id="typePasswordX" 
                   class="form-control form-control-lg" 
                   placeholder="Пароль"
-                  v-model="form.password"
+                   v-model.trim="v$.password.$model" :class="{'is-invalid': v$.password.$error}"
                 />
+                <span class="invalid-feedback" v-if="v$.password.required.$invalid">Поле обязательно для заполнения</span>
                 <span class="text-danger" v-if="errors.password">
                   {{ errors.password[0] }}
                 </span>
@@ -43,7 +46,7 @@
                 </span>
               </div>
 
-              <button class="btn btn-outline-dark btn-lg px-5" @click.prevent="login">Войти</button>
+              <button class="btn btn-outline-dark btn-lg px-5" @click.prevent="login" :disabled="!isDisabled">Войти</button>
 
             </div>
           </div>
@@ -55,37 +58,56 @@
 </template>
 
 <script>
+import { useVuelidate } from '@vuelidate/core'
+import { required, email } from '@vuelidate/validators'
+
 export default {
+  setup () {
+    return { v$: useVuelidate() }
+  },
   data() {
     return {
-      form: {
-        email: "",
-        password: ""
-      },
+      email: "",
+      password: "",
       errors: ''
     };
   },
+  validations: {
+    email: { required, email },
+    password: { required },
+  },
+   computed: {
+    isDisabled() {
+      return this.email !== '' && this.password !== '';
+    }
+  },
   methods: {
     login(e){
-      const data = {
-          email : this.form.email,
-          password : this.form.password
+      this.v$.$touch();
+      if(this.v$.$anyError) {
+        return;
       }
+      if (!this.v$.$invalid) {
+        const data = {
+          email : this.email,
+          password : this.password
+        }
         axios.get('/sanctum/csrf-cookie');
         axios.post('/api/admin.login', data).then((res) => {
-            if (res.data.success) {                        
-                //working and redirect to the home page
-                localStorage.setItem('token', res.data);
-                localStorage.setItem('isLoggedIn', true);
-                localStorage.setItem('role', 'admin');
-                this.$router.push({ path: "/admin" });
-            } else {     
-                //errors   
-                console.log('errors')                                     
-            }
+          if (res.data.success) {                        
+              //working and redirect to the home page
+              localStorage.setItem('token', res.data);
+              localStorage.setItem('isLoggedIn', true);
+              localStorage.setItem('role', 'admin');
+              this.$router.push({ path: "/admin" });
+          } else {     
+              //errors   
+              console.log('errors')                                     
+          }
         }).catch((e) => {
             this.errors = e.response.data.message
         })  
+      }
     }
   }
 }

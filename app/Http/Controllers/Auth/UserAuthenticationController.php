@@ -35,6 +35,13 @@ class UserAuthenticationController extends Controller
 
         $user = User::where('email', $request['email'])->firstOrFail();
 
+        if($user->is_blocked) {
+            return response()->json([
+                'message' => "Авторизация запрещена! Вы, ".$user->name.", заблокированы админом до ".$user->blocked_until,
+                'success' => false
+            ], 401);
+        }
+
         if($user->role != 'user') {
             return response()->json([
                 'message' => "Ваша роль: ".$user->role.", ссылка для авторизации иная",
