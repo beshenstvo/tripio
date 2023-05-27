@@ -3,6 +3,8 @@
 use App\Http\Controllers\Api\CardCityController;
 use App\Http\Controllers\Api\CityController;
 use App\Http\Controllers\Api\CommentController;
+use App\Http\Controllers\Api\FavoriteExcursionController;
+use App\Http\Controllers\Api\FavoriteRouteController;
 use App\Http\Controllers\Api\HotelController;
 use App\Http\Controllers\Api\PersonController;
 use App\Http\Controllers\Api\ReadyRouteController;
@@ -63,7 +65,9 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         'reviews' => ReviewController::class,
         'rooms' => RoomController::class,
         'showplaces' => ShowPlaceController::class,
-        'users' => UserController::class
+        'users' => UserController::class,
+        'favorite_routes' => FavoriteRouteController::class,
+        'favorite_exc' => FavoriteExcursionController::class
     ]);
     Route::get('/searchService', 'App\Http\Controllers\Api\ServiceController@searchService');
     Route::post('/users/{id}/block/{end_date}/{role}', 'App\Http\Controllers\Api\UserController@blockUser');

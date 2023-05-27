@@ -67,7 +67,20 @@ const routes = [
     path: "/favorites",
     name: "Favorites",
     component: () => import('./views/AuthUser/FavoritesComponent.vue'),
-    meta: { isAuth: true}
+    meta: { isAuth: true },
+    redirect: { name: "Favorites_route" }, 
+    children: [
+      {
+        path: "/favorite-routes",
+        name: "Favorites_route",
+        component: () => import('./views/AuthUser/FavoriteRoutesComponent.vue')
+      },
+      {
+        path: "/favorite_excursion",
+        name: "Favorites_exc",
+        component: () => import('./views/AuthUser/FavoriteExcursionsComponent.vue')
+      }
+    ]
   },
   {
     path: "/notice",

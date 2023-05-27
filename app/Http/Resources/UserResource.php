@@ -21,7 +21,8 @@ class UserResource extends JsonResource
             'email' => $this->email,
             'is_blocked' => $this->is_blocked,
             'blocked_at' => $this->blocked_at,
-            'blocked_until' => $this->blocked_until
+            'blocked_until' => $this->blocked_until,
+            'favorite_route' => $this->favorite_route
         ];
     }
 }

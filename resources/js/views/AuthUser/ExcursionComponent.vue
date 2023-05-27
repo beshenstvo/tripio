@@ -14,7 +14,7 @@
       <div class="col-md-12 mb-4" v-for="service in filteredData" :key="service.id">
         <div class="card">
           <div class="card-body">
-            <div class="row">
+            <div class="row d-flex justify-content-between">
               <div class="col-md-4 outimg">
                 <img class="innerimg" :src="'/api/image/public/'+service.photo" alt="Изображение">
               </div>
@@ -25,9 +25,16 @@
                     <p class="card-text" v-html="highlightText( $filters.truncate(service.description) )"></p>
                   </div> 
                   <div class="col-md-3">
+                    <div class="text-end" v-show="currentUser">
+                      <button class="btn btn-favorite" @click="toggleFavorite(service)">
+                        <i class="far fa-heart fa-lg"
+                          :class="{'red fas': service.isLiked }"
+                          ></i>
+                      </button>
+                    </div>
                     <p class="card-text"> <i class="fas fa-clock me-2"></i>Длительность: {{ service.duration }}</p>
                     <p class="card-text"><i class="fas fa-ruble-sign me-2"></i>Стоимость: {{ service.price }}</p>
-                    <p class="card-text"><i class="fas fa-map-marker-alt me-2"></i>Город: {{ service.city.name }}</p>
+                    <p class="card-text"><i class="fas fa-map-marker-alt me-2"></i>Город: {{ service.cities.name }}</p>
                     <p class="card-text"><i class="fas fa-binoculars me-2"></i>Тип: {{ service.type }}</p>
                     <p class="card-text"><i class="fas fa-mountain me-2"></i>Вид: {{ service.kind }}</p>
                   </div>
@@ -47,8 +54,7 @@
       </div>
 
         <!-- прогресс бар -->
-        <div class="d-flex align-items-center" v-if="loading">
-          <strong>Loading...</strong>
+        <div class="text-center" v-if="loading">
           <div class="spinner-border ms-auto" role="status" aria-hidden="true"></div>
         </div>
     </div>
@@ -184,7 +190,15 @@ export default {
       return this.name !== '' && this.phone !== '';
     },
     filteredData() {
-      return this.$options.filters.searchFilter(this.data, this.searchText);
+      const filtered = this.$options.filters.searchFilter(this.data, this.searchText);
+      const filteredArray = Array.from(filtered);
+
+      // Устанавливаем начальное значение isLiked для каждого объекта route
+      filteredArray.forEach(service => {
+        service.isLiked = this.isFavorite(service);
+      });
+
+      return filteredArray;
     }
   },
   filters: {
@@ -199,6 +213,57 @@ export default {
     }
   },
   methods: {
+    toggleFavorite(service) {
+        const currentUserService = service.favorite_service.filter(item => item.user_id == this.currentUser.id)
+
+        console.log (currentUserService)
+        console.log(service)
+        if (currentUserService.length > 0) {
+          var favoriteId = currentUserService ? currentUserService[0].id : service.id;
+          var isLiked = currentUserService && currentUserService[0].user_id === this.currentUser.id;
+        } else {
+          var favoriteId = service.id;
+          var isLiked = false
+        }
+        console.log(service)
+        console.log(isLiked)
+        if(isLiked) { 
+          axios.post('/api/favorite_exc/'+favoriteId, {
+            _method: 'DELETE'
+          })
+          .then((response) => {
+           if(response.status == 204) {
+            service.isLiked = false;
+            this.getServices()
+           }
+          })
+          .catch((error) => {
+            console.error('Failde to unlike: ', error)
+          })
+        } else { 
+          axios.post('/api/favorite_exc', {
+            user_id: this.currentUser.id,
+            service_id: service.id
+          })
+          .then((response) => {
+            service.isLiked = true;
+            this.getServices()
+          })
+          .catch((error) => {
+            console.error('Failed to like:', error);
+          });
+        }
+      },
+      isFavorite(service) {
+        console.log(service)
+        const currentUserService = service.favorite_service.filter(item => item.user_id == this.currentUser.id)
+        const isLiked = currentUserService.some( // Check if the current user has liked the route
+          favorite => favorite.user_id === this.currentUser.id
+        );
+
+        console.log(isLiked)
+        return isLiked; // Return true if the route is liked by the current user, false otherwise
+      },
       getServices(page = 1) {
         axios.get('/api/servicesAll', {
           params: {
@@ -266,3 +331,12 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.btn-favorite{
+  border: none;
+}
+.red {
+  color: red;
+}
+</style>

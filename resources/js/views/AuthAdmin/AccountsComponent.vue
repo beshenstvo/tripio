@@ -48,6 +48,10 @@
       </div>
     </div>
 
+    <!-- прогресс бар -->
+    <div class="text-center" v-if="loading">
+      <div class="spinner-border ms-auto" role="status" aria-hidden="true"></div>
+    </div>
 
 
     <!-- Модальное окно для добавления -->
@@ -197,9 +201,9 @@
                   <label for="route-name">Имя</label>
                   <input type="text" class="form-control" id="route-name" placeholder="" v-model="blockUserName" disabled>
                 </div>
-                 <div class="mb-3">
+                <div class="mb-3">
                   <label for="route-description">Дата окончания блокировки</label>
-                  <input class="form-control" :min="tomorrow.toISOString().slice(0, 10)" type="date" id="route-description" v-model="dateEnd" :value="tomorrow.toISOString().slice(0, 10)">
+                  <input class="form-control" :min="tomorrow.toISOString().slice(0, 10)" type="date" id="route-description" v-model="dateEnd">
                 </div>
               </form>
             </div>
@@ -250,6 +254,7 @@ export default {
       },
       currentRole: localStorage.getItem('role'),
       tomorrow: new Date(),
+      loading: true
     }
   },
   validations() {
@@ -325,6 +330,9 @@ export default {
         this.data = response.data.data;
         this.pagination = response.data.meta;
         console.log(this.pagination)
+      })
+      .finally(() => {
+        this.loading = false;
       })
     },
     highlightText(text) {

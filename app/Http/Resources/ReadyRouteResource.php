@@ -22,6 +22,7 @@ class ReadyRouteResource extends JsonResource
             'duration' => $this->duration,
             'photo' => $this->photo,
             'city' => $this->cities,
+            'favorite_route' => $this->favorite_route
         ];
     }
 }

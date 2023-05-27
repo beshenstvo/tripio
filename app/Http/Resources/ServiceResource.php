@@ -25,7 +25,8 @@ class ServiceResource extends JsonResource
             'type' => $this->type,
             'kind' => $this->kind,
             'photo' => $this->photo,
-            'city' => $this->city,
+            'cities' => $this->cities,
+            'favorite_service' => $this->favorite_service
         ];
     }
 }

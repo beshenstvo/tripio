@@ -27,6 +27,10 @@ class User extends Authenticatable
         'blocked_until'
     ];
 
+    public function favorite_route() {
+        return $this->hasMany(Favorite_route::class, 'user_id');
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

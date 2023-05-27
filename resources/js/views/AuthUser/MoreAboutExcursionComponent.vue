@@ -46,8 +46,7 @@
     </div>
 
     <!-- прогресс бар -->
-    <div class="d-flex align-items-center" v-if="loading">
-      <strong>Loading...</strong>
+    <div class="text-center" v-if="loading">
       <div class="spinner-border ms-auto" role="status" aria-hidden="true"></div>
     </div>
 
@@ -75,7 +74,8 @@ export default {
     loadData() {
       axios.get('/api/services/'+ this.id)
       .then((response) => {
-        this.city = response.data.data.city.name;
+        console.log(response.data.data);
+        this.city = response.data.data.cities.name;
         this.data = response.data.data;
       })
       .catch( error => {

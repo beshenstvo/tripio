@@ -12,6 +12,10 @@ class Ready_route extends Model
     public function cities() {
         return $this->belongsTo(City::class, 'city_id');
     }
+    
+    public function favorite_route() {
+        return $this->hasMany(Favorite_route::class, 'ready_routes_id');
+    }
 
     protected $fillable = [
         'city_id',

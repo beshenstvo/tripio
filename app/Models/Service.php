@@ -9,9 +9,12 @@ class Service extends Model
 {
     use HasFactory;
 
-    public function city()
-    {
+    public function cities() {
         return $this->belongsTo(City::class, 'city_id');
+    }
+
+    public function favorite_service() {
+        return $this->hasMany(Favorite_excursion::class, 'service_id');
     }
 
     protected $fillable = [

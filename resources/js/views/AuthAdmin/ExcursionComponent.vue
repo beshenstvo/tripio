@@ -28,7 +28,7 @@
                   <div class="col-md-3">
                     <p class="card-text"> <i class="fas fa-clock me-2"></i>Длительность: {{ service.duration }}</p>
                     <p class="card-text"><i class="fas fa-ruble-sign me-2"></i>Стоимость: {{ service.price }}</p>
-                    <p class="card-text"><i class="fas fa-map-marker-alt me-2"></i>Город: {{ service.city.name }}</p>
+                    <p class="card-text"><i class="fas fa-map-marker-alt me-2"></i>Город: {{ service.cities.name }}</p>
                     <p class="card-text"><i class="fas fa-binoculars me-2"></i>Тип: {{ service.type }}</p>
                     <p class="card-text"><i class="fas fa-mountain me-2"></i>Вид: {{ service.kind }}</p>
                   </div>
@@ -48,8 +48,7 @@
       </div>
 
         <!-- прогресс бар -->
-        <div class="d-flex align-items-center" v-if="loading">
-          <strong>Loading...</strong>
+        <div class="text-center" v-if="loading">
           <div class="spinner-border ms-auto" role="status" aria-hidden="true"></div>
         </div>
     </div>
@@ -314,7 +313,6 @@ export default {
         
         if (
           this.city_id == this.originalService.city_id &&
-          this.currentUser.id == this.originalService.user_id &&
           this.name == this.originalService.name &&
           this.description == this.originalService.description &&
           this.duration == this.originalService.duration &&
@@ -331,7 +329,7 @@ export default {
         let formData = new FormData();
         formData.append('_method', 'PUT');
         formData.append('city_id', this.city_id);
-        formData.append('user_id', this.currentUser.id);
+        formData.append('user_id', this.originalService.user_id);
         formData.append('name', this.name);
         formData.append('description', this.description);
         formData.append('duration', this.duration);

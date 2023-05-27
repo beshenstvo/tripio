@@ -30,8 +30,7 @@
   </div>
 
   <!-- прогресс бар -->
-  <div class="d-flex align-items-center" v-if="loading">
-    <strong>Loading...</strong>
+  <div class="text-center" v-if="loading">
     <div class="spinner-border ms-auto" role="status" aria-hidden="true"></div>
   </div>
   
