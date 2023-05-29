@@ -1,6 +1,7 @@
 <template>
-  <div class="container">
-    <div class="row d-flex justify-content-between mt-3 mb-4">
+  <div class="container" v-show="loaded">
+    <div  v-show="isVerifiedShow">
+      <div class="row d-flex justify-content-between mt-3 mb-4">
       <div class="col-md-11" style="margin-top: auto; margin-bottom: auto;">
         <div class="input-group">
           <input type="text" class="form-control searchInput" placeholder="Введите название или описание услуги" aria-describedby="button-addon2" v-model.trim="searchText">
@@ -235,7 +236,13 @@
         </div>
       </div>
     </div>
-    
+    </div>
+    <div class="center-container" v-show="!isVerifiedShow">
+      <div class="center-content">
+        <h1>Доступ к функционалу данной страницы будет предоставлен после успешного прохождения верификации.</h1>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -284,7 +291,10 @@ export default {
         kind: ''
       }, 
       fileName: '',
-      errorFile: false
+      errorFile: false,
+      isVerified: null,
+      isVerifiedShow: false,
+      loaded: false
     }
   },
   validations: {
@@ -300,12 +310,7 @@ export default {
     }
   },
   mounted() {
-    this.getServices();
-    this.getCities();
-    window.axios.defaults.headers.common['Authorization'] = `Bearer ${this.token}`;
-    axios.get('api/user').then((response) => {
-        this.currentUser = response.data;
-    })
+    this.initializeData();
   }, 
   computed: {
     isDisabled() {
@@ -330,184 +335,223 @@ export default {
     },
   },
   methods: {
-      getServices(page = 1) {
-        axios.get('/api/services', {
-          params: {
-            page: page
-          }
-        })
-        .then( response => {
-          console.log(response.data.data)
-          this.data = response.data.data;
-          this.pagination = response.data.meta;
-          console.log(this.pagination)
-        })
-        .catch( error => {
-            this.errored = true;
-        })
-        .finally( () => {
-            this.loading = false;
-        }); 
-      },
-      getCities() {
-        axios.get('/api/cities')
-        .then( response => {
-          console.log(response.data.data)
-          this.cities = response.data.data;
-        })
-        .catch( error => {
-            this.errored = true;
-        })
-      },
-      deleteService(id) {
-         console.log(id);
-          axios.post('/api/services/'+id, {
-              _method: 'DELETE'
-          })
-          .catch( error => {
-              console.log(error);
-              this.errored = true;
-          })
-          this.getServices()
-      },
-      handleFileChange(e) {
-        this.file = e.target.files[0];
-        this.checkSelectedInput = true;
-        this.selectImg = true;
-        console.log(this.file);
-      },
-      add() {
-        this.v$.$touch();
-        if(this.v$.$anyError) {
-          return;
+    async initializeData() {
+      await this.getServices();
+      await this.getCities();
+      await this.getCurrentUser();
+      await this.getIsVerified(this.currentUser);
+      if (this.isVerified) {
+        this.isVerifiedShow = true;
+      }
+      this.loaded = true;
+      this.loading = false;
+    },
+    async getIsVerified(user) {
+      try {
+        const response = await axios.get('api/guide_verification/is_verified/' + user.id);
+        this.isVerified = response.data === 1;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async getCurrentUser() {
+      try {
+        const response = await axios.get('api/user');
+        this.currentUser = response.data;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    getServices(page = 1) {
+      axios.get('/api/services', {
+        params: {
+          page: page
         }
-        if(!validFormat(this.file) || !maxSize(1024)(this.file)) {
-          this.errorFile = true;
-          return;
-        }
-        if (!this.v$.$invalid) {
-          let formData = new FormData();
-          formData.append('city_id', this.city_id);
-          formData.append('user_id', this.currentUser.id);
-          formData.append('name', this.name);
-          formData.append('description', this.description);
-          formData.append('duration', this.duration);
-          formData.append('photo', this.file);
-          formData.append('type', this.type);
-          formData.append('kind', this.kind);
-          formData.append('price', this.price);
-
-          axios.post('/api/services/', formData)
-          .then(response => {
-            console.log(response);
-            console.log(response.status);
-            if(response.status == 200) {
-              this.showModal = false
-              this.checkSelectedInput = false
-              alert('Данные созданы')
-            }
-            this.getServices()
-          })
-          .catch( error => {
-              this.errored = true;
-          })
-        }
-      },
-      async saveUpdates(id) {
-        this.v$.$touch();
-        if(this.v$.$anyError) {
-          return;
-        }
-        if (!this.v$.$invalid) { 
-          await axios.get('api/services/'+id).then(response => {
-          this.originalService.city_id = response.data.data.city_id
-          this.originalService.user_id = response.data.data.user_id
-          this.originalService.name = response.data.data.name
-          this.originalService.description = response.data.data.description
-          this.originalService.duration = response.data.data.duration
-          this.originalService.type = response.data.data.type
-          this.originalService.kind = response.data.data.kind
-          this.originalService.price = response.data.data.price
-          this.originalService.photo = response.data.data.photo
-        })
-        
-        if (
-          this.city_id == this.originalService.city_id &&
-          this.currentUser.id == this.originalService.user_id &&
-          this.name == this.originalService.name &&
-          this.description == this.originalService.description &&
-          this.duration == this.originalService.duration &&
-          this.type == this.originalService.type &&
-          this.kind == this.originalService.kind &&
-          this.price == this.originalService.price &&
-          !this.checkSelectedImage &&
-          this.fileName == this.originalService.photo
-        ) {
-          this.showModalEditing = false;
-          return;
-        }
-
+      })
+      .then( response => {
+        console.log(response.data.data)
+        this.data = response.data.data;
+        this.pagination = response.data.meta;
+        console.log(this.pagination)
+      })
+      .catch( error => {
+          this.errored = true;
+      })
+      .finally( () => {
+          this.loading = false;
+      }); 
+    },
+    getCities() {
+      axios.get('/api/cities')
+      .then( response => {
+        console.log(response.data.data)
+        this.cities = response.data.data;
+      })
+      .catch( error => {
+          this.errored = true;
+      })
+    },
+    deleteService(id) {
+      console.log(id);
+      axios.post('/api/services/'+id, {
+          _method: 'DELETE'
+      })
+      .catch( error => {
+          console.log(error);
+          this.errored = true;
+      })
+      this.getServices()
+    },
+    handleFileChange(e) {
+      this.file = e.target.files[0];
+      this.checkSelectedInput = true;
+      this.selectImg = true;
+      console.log(this.file);
+    },
+    add() {
+      this.v$.$touch();
+      if(this.v$.$anyError) {
+        return;
+      }
+      if(!validFormat(this.file) || !maxSize(1024)(this.file)) {
+        this.errorFile = true;
+        return;
+      }
+      if (!this.v$.$invalid) {
         let formData = new FormData();
-        formData.append('_method', 'PUT');
         formData.append('city_id', this.city_id);
         formData.append('user_id', this.currentUser.id);
         formData.append('name', this.name);
         formData.append('description', this.description);
         formData.append('duration', this.duration);
+        formData.append('photo', this.file);
         formData.append('type', this.type);
         formData.append('kind', this.kind);
         formData.append('price', this.price);
-        if((this.file !== null)) {
-          if(!validFormat(this.file) || !maxSize(1024)(this.file)) {
-            this.errorFile = true;
-            return;
+
+        axios.post('/api/services/', formData)
+        .then(response => {
+          console.log(response);
+          console.log(response.status);
+          if(response.status == 200) {
+            this.showModal = false
+            this.checkSelectedInput = false
+            alert('Данные созданы')
           }
-          formData.append('photo', this.file);
-        }
+          this.getServices()
+        })
+        .catch( error => {
+            this.errored = true;
+        })
+      }
+    },
+    async saveUpdates(id) {
+      this.v$.$touch();
+      if(this.v$.$anyError) {
+        return;
+      }
+      if (!this.v$.$invalid) { 
+        await axios.get('api/services/'+id).then(response => {
+        this.originalService.city_id = response.data.data.city_id
+        this.originalService.user_id = response.data.data.user_id
+        this.originalService.name = response.data.data.name
+        this.originalService.description = response.data.data.description
+        this.originalService.duration = response.data.data.duration
+        this.originalService.type = response.data.data.type
+        this.originalService.kind = response.data.data.kind
+        this.originalService.price = response.data.data.price
+        this.originalService.photo = response.data.data.photo
+      })
+      
+      if (
+        this.city_id == this.originalService.city_id &&
+        this.currentUser.id == this.originalService.user_id &&
+        this.name == this.originalService.name &&
+        this.description == this.originalService.description &&
+        this.duration == this.originalService.duration &&
+        this.type == this.originalService.type &&
+        this.kind == this.originalService.kind &&
+        this.price == this.originalService.price &&
+        !this.checkSelectedImage &&
+        this.fileName == this.originalService.photo
+      ) {
+        this.showModalEditing = false;
+        return;
+      }
 
-        axios.post('/api/services/'+id, formData)
-          .then(response => {
-            console.log(response.status);
-            if(response.status == 200) {
-              this.getServices()
-              this.checkSelectedInput = false;
-              this.showModalEditing = false
-              alert('Данные обновлены');
-              return
-            }
+      let formData = new FormData();
+      formData.append('_method', 'PUT');
+      formData.append('city_id', this.city_id);
+      formData.append('user_id', this.currentUser.id);
+      formData.append('name', this.name);
+      formData.append('description', this.description);
+      formData.append('duration', this.duration);
+      formData.append('type', this.type);
+      formData.append('kind', this.kind);
+      formData.append('price', this.price);
+      if((this.file !== null)) {
+        if(!validFormat(this.file) || !maxSize(1024)(this.file)) {
+          this.errorFile = true;
+          return;
+        }
+        formData.append('photo', this.file);
+      }
+
+      axios.post('/api/services/'+id, formData)
+        .then(response => {
+          console.log(response.status);
+          if(response.status == 200) {
             this.getServices()
-          })
-          .catch( error => {
-              console.log(error);
-              this.errored = true;
-          })
-        }
-      },
-      showModalEditingFunc(id) {
-        this.showModalEditing = true;
-        axios.get('/api/services/'+id)
-          .then(response => {
-            this.id = response.data.data.id;
-            this.name = response.data.data.name;
-            this.description = response.data.data.description;
-            this.city_id = response.data.data.city_id;
-            this.duration = response.data.data.duration;
-            this.price = response.data.data.price;
-            this.type = response.data.data.type;
-            this.kind = response.data.data.kind;
-            this.fileName = response.data.data.photo;
-          })
-          .catch( error => {
-              console.log(error);
-              this.errored = true;
-          })
-
-      }, 
-      highlightText(text) {
-        if (!this.searchText) return text;
-        const regex = new RegExp(`(${this.searchText})`, 'gi');
-        return text.replace(regex, '<mark>$1</mark>');
-      },
+            this.checkSelectedInput = false;
+            this.showModalEditing = false
+            alert('Данные обновлены');
+            return
+          }
+          this.getServices()
+        })
+        .catch( error => {
+            console.log(error);
+            this.errored = true;
+        })
+      }
+    },
+    showModalEditingFunc(id) {
+      this.showModalEditing = true;
+      axios.get('/api/services/'+id)
+      .then(response => {
+        this.id = response.data.data.id;
+        this.name = response.data.data.name;
+        this.description = response.data.data.description;
+        this.city_id = response.data.data.city_id;
+        this.duration = response.data.data.duration;
+        this.price = response.data.data.price;
+        this.type = response.data.data.type;
+        this.kind = response.data.data.kind;
+        this.fileName = response.data.data.photo;
+      })
+      .catch( error => {
+          console.log(error);
+          this.errored = true;
+      })
+    }, 
+    highlightText(text) {
+      if (!this.searchText) return text;
+      const regex = new RegExp(`(${this.searchText})`, 'gi');
+      return text.replace(regex, '<mark>$1</mark>');
+    },
   }
 }
 </script>
+
+<style scoped>
+.center-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.center-content {
+  text-align: center;
+}
+</style>

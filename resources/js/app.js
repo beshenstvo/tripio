@@ -60,7 +60,7 @@ router.beforeEach((to, from, next) => {
       const allowedRoutes = {
         'guide': ['Guide.tours', 'Guide.service', 'Guide.request', 'Guide.profile', 'Guide.notice', 'Guide.home', 'Guide.verification', 'Guide.archive', 'Guide.active', 'Error'],
         'user': ['Home', 'Route', 'Hotel' ,'Excursion', 'Forum', 'Favorites', 'Notice', 'Profile', 'MoreAboutRoute', 'MoreAboutExcursion', 'Favorites_route', 'Favorites_exc', 'Error'],
-        'admin': ['Admin.allaccounts', 'Admin.home', 'Admin.excursion', 'Admin.readyroute', 'Admin.forum', 'Admin.reviews',
+        'admin': ['Admin.allaccounts', 'Admin.home', 'Admin.excursion', 'Admin.readyroute', 'Admin.forum', 'Admin.reviews', 'Admin.verification',
         'Admin.notice', 'Admin.citycard', 'Error']
       };
       

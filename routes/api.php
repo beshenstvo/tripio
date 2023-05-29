@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\CityController;
 use App\Http\Controllers\Api\CommentController;
 use App\Http\Controllers\Api\FavoriteExcursionController;
 use App\Http\Controllers\Api\FavoriteRouteController;
+use App\Http\Controllers\Api\GuideVerificationController;
 use App\Http\Controllers\Api\HotelController;
 use App\Http\Controllers\Api\PersonController;
 use App\Http\Controllers\Api\ReadyRouteController;
@@ -67,12 +68,17 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         'showplaces' => ShowPlaceController::class,
         'users' => UserController::class,
         'favorite_routes' => FavoriteRouteController::class,
-        'favorite_exc' => FavoriteExcursionController::class
+        'favorite_exc' => FavoriteExcursionController::class,
+        'guide_verification' => GuideVerificationController::class
     ]);
     Route::get('/searchService', 'App\Http\Controllers\Api\ServiceController@searchService');
     Route::post('/users/{id}/block/{end_date}/{role}', 'App\Http\Controllers\Api\UserController@blockUser');
     Route::post('/users/{id}/unlock/{role}', 'App\Http\Controllers\Api\UserController@unlockUser');
-
+    Route::get('/guide_verification/is_verified/{id}', 'App\Http\Controllers\Api\GuideVerificationController@getIsVerified');
+    Route::get('/guide_verification/is_submitted/{id}', 'App\Http\Controllers\Api\GuideVerificationController@getIsSubmitted');
+    Route::get('/guide_verification/has_is_message/{id}', 'App\Http\Controllers\Api\GuideVerificationController@hasMessage');
+    Route::put('/guide_verification/updateSecondAfterGettingMessage/{id}', 'App\Http\Controllers\Api\GuideVerificationController@updateSecondAfterGettingMessage');
+    
 });
 
 # роуты для гостя

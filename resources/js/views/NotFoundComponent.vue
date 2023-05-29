@@ -2,7 +2,7 @@
   <div class="container mt-5 mb-5" style="text-align: center"> 
   <h1>{{ title }}</h1>
   <p>{{ message }}</p>
-  <img src="https://placekitten.com/900/560">
+  <img src="https://http.cat/404">
   </div>
 </template>
 

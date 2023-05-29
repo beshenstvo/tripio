@@ -131,6 +131,12 @@ const routes = [
     meta: { isAuth: true }
   },
   {
+    path: "/admin/guide_verification",
+    name: "Admin.verification",
+    component: () => import('./views/AuthAdmin/GuideVerificationComponent.vue'),
+    meta: { isAuth: true }
+  },
+  {
     path: "/admin/notice",
     name: "Admin.notice",
     component: () => import('./views/AuthAdmin/NoticeComponent.vue'),

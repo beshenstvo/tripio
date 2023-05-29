@@ -2,7 +2,7 @@
   <div class="col-12 text-center p-4">
     <h2>Добро пожаловать, {{ currentUser.name }}, на дашборд админа!</h2>
     <hr>
-    <img src="https://placekitten.com/450/560" style="border-radius: 10px">
+    <img src="https://http.cat/200" style="border-radius: 10px">
   </div>
 </template>
 

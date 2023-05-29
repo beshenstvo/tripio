@@ -16,7 +16,7 @@
       </li>
       <li class="nav-item p-2">
         <router-link :to="{ name: 'Admin.citycard' }" class="nav-link fas fa-city">
-          Карточки городов
+          Инфо городов
         </router-link>
       </li>
       <li class="nav-item p-2">
@@ -27,6 +27,11 @@
       <li class="nav-item p-2">
         <router-link :to="{ name: 'Admin.reviews' }" class="nav-link fas fa-star">
           Отзывы
+        </router-link>
+      </li>
+      <li class="nav-item p-2">
+        <router-link :to="{ name: 'Admin.verification' }" class="nav-link fas fa-check-circle">
+          Проверка гида
         </router-link>
       </li>
       <li class="nav-item p-2">
