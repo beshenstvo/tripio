@@ -5,9 +5,12 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RequestRequest;
 use App\Http\Resources\RequestResource;
+use App\Mail\Feedback;
 use App\Models\Request as ModelsRequest;
+use App\Models\Service;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Mail;
 
 /**
  * @OA\Schema(
@@ -270,6 +273,21 @@ class RequestController extends Controller
     {
         $requestFromUser = ModelsRequest::create($request->validated());
         
+        $name = $request->client_name;
+        $phone = $request->client_phone;
+        $message = $request->message;
+
+        $exc_name = Service::where('id', $request->service_id)->value('name');
+
+        $guide_email = ModelsRequest::join('services', 'requests.service_id', '=', 'services.id')
+        ->join('users', 'services.user_id', '=', 'users.id')
+        ->where('services.id', $request->service_id)
+        ->select('email')->first();
+        
+        // надо будет вставить в mail ro $guide_email->email;
+        
+        Mail::to('mufwoo@gmail.com')->send(new Feedback($name, $phone, $message, $exc_name));
+
         return new RequestResource($requestFromUser);
     }
 

@@ -38,7 +38,7 @@
           <div class="card-footer d-flex justify-content-between">
             <a></a>
             <!-- <a class="btn btn-outline-primary mr-2" v-on:click="more( route.id )"></a> -->
-            <router-link class="btn btn-outline-primary mr-2" :to="{ name: 'MoreAboutRoute', params: { id: service.service.id } }"><i class="fas fa-info-circle"></i><span class="ms-1">Подробнее</span></router-link>
+            <router-link class="btn btn-outline-primary mr-2" :to="{ name: 'MoreAboutExcursion', params: { id: service.service.id } }"><i class="fas fa-info-circle"></i><span class="ms-1">Подробнее</span></router-link>
           </div>
         </div>
       </div>
