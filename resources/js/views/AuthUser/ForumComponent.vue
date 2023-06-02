@@ -175,5 +175,6 @@ export default {
 .add-topic button {
   padding: 5px 10px;
   font-size: 16px;
+  /*  */
 }
 </style>

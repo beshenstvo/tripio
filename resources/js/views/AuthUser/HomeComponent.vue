@@ -130,6 +130,11 @@
       </div>
     </div>
 
+
+    <!--Start of Tawk.to Script-->
+    <div id="tawkchat-component"></div>
+    <!--End of Tawk.to Script-->
+
   </div>
 </template>
 
@@ -146,13 +151,18 @@ export default {
     
   }, 
   mounted() {
-   if(this.isLoggedIn) {
-      window.axios.defaults.headers.common['Authorization'] = `Bearer ${this.token}`;
-      axios.get('api/user').then((response) => {
-        this.currentUser = response.data;
-        console.log(this.currentUser);
-      })
-    }
+    const script = document.createElement('script');
+    script.src = 'https://embed.tawk.to/6476035a74285f0ec46e81a0/1h1mfq705';
+    script.async = true;
+    script.setAttribute('crossorigin', '*');
+    document.head.appendChild(script);
+    if(this.isLoggedIn) {
+        window.axios.defaults.headers.common['Authorization'] = `Bearer ${this.token}`;
+        axios.get('api/user').then((response) => {
+          this.currentUser = response.data;
+          console.log(this.currentUser);
+        })
+      }
   }
 };
 </script>
