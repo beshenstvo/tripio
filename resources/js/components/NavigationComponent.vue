@@ -2,7 +2,7 @@
   <nav class="navbar navbar-expand navbar-light bg-light mynav">
     <div class="container">
       <div class="navbar-header">
-        <router-link class="navbar-brand" to="/"><img src="/api/image/public/logo.svg" alt="logo" width="90"></router-link>
+        <router-link class="navbar-brand" to="/"><img src="../../../public/images/logo.svg" alt="logo" width="90"></router-link>
       </div>
       <div class="collapse navbar-collapse">
         <div class="d-flex justify-content-start">

@@ -2,7 +2,7 @@
   <div class="sidebar" style="width: 16%;">
     <ul class="nav flex-column">
       <li class="p-4" style="text-align: center">
-        <img src="/api/image/public/logo.svg" alt="logo" width="90" >
+        <img src="../../../public/images/logo.svg" alt="logo" width="90" >
       </li>
       <li class="nav-item p-2">
         <router-link :to="{ name: 'Guide.service' }" class="nav-link fas fa-tasks">

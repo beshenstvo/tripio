@@ -213,17 +213,17 @@ input {
   height: 100%
 }
 .card2 {
-  background-image: url('http://127.0.0.1:8000/storage/05fab50966ea5bb084ad00821d7c9dfa.webp');
+  background-image: url('../../../../public/images/05fab50966ea5bb084ad00821d7c9dfa.webp');
 }
 .card1 {
-  background-image: url('http://127.0.0.1:8000/storage/pexelsvierro3629813.webp');
+  background-image: url('../../../../public/images/pexelsvierro3629813.webp');
 }
 .card3 {
-  background-image: url('http://127.0.0.1:8000/storage/1661439903_10-celes-club-p-vidi-samari-instagram-10.jpg');
+  background-image: url('../../../../public/images/1661439903_10-celes-club-p-vidi-samari-instagram-10.jpg');
   background-position: center;
 }
 .card4 {
-  background-image: url('http://127.0.0.1:8000/storage/Санкт-Петербург-1200x778.jpg');
+  background-image: url('../../../../public/images/Санкт-Петербург-1200x778.jpg');
 }
 .card-title-style, .card-text-style {
   transition: all 0.4s ease-in;
@@ -272,7 +272,7 @@ input {
 .main-container {
   min-height: 94vh;
   background-blend-mode: multiply;
-  background-image: url('http://127.0.0.1:8000/storage/fon2.jpg');
+  background-image: url('../../../../public/images/fon2.jpg');
   background-color: rgba(0, 0, 0, 0.2);
   background-size: cover;
   display: flex;
